@@ -1,0 +1,12 @@
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+
+# Eval / iteration artifacts (skills are the deliverable; evals stay local)
+*-workspace/
+**/evals/

@@ -1,0 +1,46 @@
+{
+  "name": "TRPA Claude Skills",
+  "owner": {
+    "name": "Tahoe Regional Planning Agency",
+    "url": "https://github.com/trpa-agency"
+  },
+  "description": "A collection of Claude skills used by TRPA staff for planning, data access, dashboard development, and brand-consistent design.",
+  "plugins": [
+    {
+      "name": "trpa-brand",
+      "source": "./skills/trpa-brand",
+      "description": "TRPA agency brand guidelines \u2014 TRPA Blue, color palette, typography, logo usage, page layout, writing style, and tone. Use whenever building anything that carries the TRPA identity (trpa.gov, laketahoeinfo.org, internal tools)."
+    },
+    {
+      "name": "trpa-eip-brand",
+      "source": "./skills/trpa-eip-brand",
+      "description": "Lake Tahoe EIP (Environmental Improvement Program) brand guidelines. Apply to any UI, dashboard, report, or visual output for EIP or its sub-programs (Forest Health, Aquatic Invasive Species, Stormwater)."
+    },
+    {
+      "name": "tahoe-living-brand",
+      "source": "./skills/tahoe-living-brand",
+      "description": "Tahoe Living / Cultivating Community brand guidelines \u2014 warm, equity-centered visual identity for TRPA's housing initiative. Distinct from institutional TRPA blue."
+    },
+    {
+      "name": "trpa-dashboard-stack",
+      "source": "./skills/trpa-dashboard-stack",
+      "description": "TRPA's dashboard and web-app tech stack \u2014 Plotly.js, Calcite Design System, ArcGIS Maps SDK, AG Grid. CDN loading, page structure, coding patterns. Pair with a brand skill."
+    },
+    {
+      "name": "trpa-data-services",
+      "source": "./skills/trpa-data-services",
+      "description": "How to access TRPA's spatial and tabular data across five systems: maps.trpa.org ArcGIS Server, services5.arcgis.com AGOL tenant, LTInfo WebServices (tabular), LTInfo Accela API (nightly permit data), and LTInfo GeoServer (WFS/WMS)."
+    },
+    {
+      "name": "trpa-zoning-services",
+      "source": "./skills/trpa-zoning-services",
+      "description": "TRPA zoning and permissible-use data services. REST endpoints, field schemas, and join logic for zoning districts, permitted uses, tolerance districts, special designations, and parcel attributes."
+    },
+    {
+      "name": "trpa-climate-dashboard",
+      "source": "./skills/trpa-climate-dashboard",
+      "description": "Climate Resilience Dashboard for Lake Tahoe (climate.laketahoeinfo.org). 4-goal indicator framework, 33 metrics, data sources, visualization types, and page patterns."
+    }
+  ],
+  "url": "https://github.com/trpa-agency/trpa-claude-skills"
+}
