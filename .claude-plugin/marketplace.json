@@ -1,5 +1,5 @@
 {
-  "name": "TRPA Claude Skills",
+  "name": "trpa-claude-skills",
   "owner": {
     "name": "Tahoe Regional Planning Agency",
     "url": "https://github.com/trpa-agency"
@@ -9,7 +9,7 @@
     {
       "name": "trpa-brand",
       "source": "./skills/trpa-brand",
-      "description": "TRPA agency brand guidelines \u2014 TRPA Blue, color palette, typography, logo usage, page layout, writing style, and tone. Use whenever building anything that carries the TRPA identity (trpa.gov, laketahoeinfo.org, internal tools)."
+      "description": "TRPA agency brand guidelines — TRPA Blue, color palette, typography, logo usage, page layout, writing style, and tone. Use whenever building anything that carries the TRPA identity (trpa.gov, laketahoeinfo.org, internal tools)."
     },
     {
       "name": "trpa-eip-brand",
@@ -19,12 +19,17 @@
     {
       "name": "tahoe-living-brand",
       "source": "./skills/tahoe-living-brand",
-      "description": "Tahoe Living / Cultivating Community brand guidelines \u2014 warm, equity-centered visual identity for TRPA's housing initiative. Distinct from institutional TRPA blue."
+      "description": "Tahoe Living / Cultivating Community brand guidelines — warm, equity-centered visual identity for TRPA's housing initiative. Distinct from institutional TRPA blue."
     },
     {
       "name": "trpa-dashboard-stack",
       "source": "./skills/trpa-dashboard-stack",
-      "description": "TRPA's dashboard and web-app tech stack \u2014 Plotly.js, Calcite Design System, ArcGIS Maps SDK, AG Grid. CDN loading, page structure, coding patterns. Pair with a brand skill."
+      "description": "TRPA's dashboard and web-app tech stack — Plotly.js, Calcite Design System, ArcGIS Maps SDK, AG Grid. CDN loading, page structure, coding patterns. Pair with a brand skill."
+    },
+    {
+      "name": "trpa-dashboard-qa",
+      "source": "./skills/trpa-dashboard-qa",
+      "description": "Pre-deploy QA checklist for TRPA dashboards and web tools: data, brand, stack, accessibility, mobile, and copy checks before a browser tool goes live. Pair with trpa-dashboard-stack and a brand skill."
     },
     {
       "name": "trpa-data-services",

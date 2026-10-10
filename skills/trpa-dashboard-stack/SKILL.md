@@ -17,7 +17,7 @@ This skill defines the required tech stack and patterns. **Always pair with the 
 
 ## Required Libraries
 
-Every dashboard must use these four libraries. Load them in this order.
+Every dashboard must use these four libraries. **Load order matters: Calcite, then Plotly and AG Grid, then the ArcGIS Maps SDK last.** The ArcGIS SDK brings a Dojo AMD loader; once it is on the page, UMD bundles such as Plotly, AG Grid, and jsPDF register as anonymous AMD modules instead of globals and `Plotly` or `agGrid` is undefined (or Dojo throws `multipleDefine`). Loading the UMD libraries first avoids it. The sections below are numbered by role, not by load order.
 
 ### 1. Calcite Design System (UI shell and components)
 
@@ -67,9 +67,11 @@ Plotly is the charting library. Use it for all bar charts, line charts, stacked 
 AG Grid is the table/grid library. Use it for any tabular data display with sorting, filtering, pagination, and CSV export. Do NOT use plain HTML tables for data — always use AG Grid.
 
 ```html
-<!-- AG Grid Community -->
-<script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+<!-- AG Grid Community (pin the version; an unpinned URL changes under you) -->
+<script src="https://cdn.jsdelivr.net/npm/ag-grid-community@33.3.2/dist/ag-grid-community.min.js"></script>
 ```
+
+AG Grid 33 uses the Theming API: build a theme with `agGrid.themeQuartz.withParams({...})` and pass it as the `theme` grid option. Do not load the legacy `ag-theme-*.css` files.
 
 ---
 
@@ -119,15 +121,14 @@ Every dashboard follows this structure. The template below uses EIP brand tokens
   <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
   <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/5.0/calcite.css" />
 
-  <!-- ArcGIS Maps SDK (include if dashboard has a map) -->
+  <!-- Plotly.js and AG Grid BEFORE the ArcGIS SDK: once Dojo defines an AMD loader,
+       UMD bundles register as anonymous modules instead of globals -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@33.3.2/dist/ag-grid-community.min.js"></script>
+
+  <!-- ArcGIS Maps SDK (include if dashboard has a map), last -->
   <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css" />
   <script src="https://js.arcgis.com/4.31/"></script>
-
-  <!-- Plotly.js -->
-  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
-
-  <!-- AG Grid Community -->
-  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
 
   <!-- Google Fonts — swap per brand:
        EIP:          Lexend Deca
@@ -345,7 +346,8 @@ Every dashboard follows this structure. The template below uses EIP brand tokens
         margin: { t: 20, r: 20, b: 40, l: 50 },
         xaxis: { gridcolor: '#e8e8e8' },
         yaxis: { gridcolor: '#e8e8e8' },
-        colorway: BRAND_COLORS
+        colorway: BRAND_COLORS,
+        hovermode: 'x unified'   // always: one popup per x value listing every series
       };
       Plotly.newPlot('plotly-chart', [trace], layout, {
         responsive: true,
@@ -410,9 +412,11 @@ Every dashboard follows this structure. The template below uses EIP brand tokens
 
 - **Always set `displayModeBar: false`** — the floating toolbar clutters the dashboard.
 - **Always set `responsive: true`** — charts must resize with the container.
+- **Always set `hovermode: 'x unified'`** — one hover popup per x value that lists every series, so readers compare values without moving the cursor across bars. Never the default per-point hover.
 - **Use `paper_bgcolor: 'transparent'` and `plot_bgcolor: 'transparent'`** — the chart container provides the white background.
 - **Font:** Set `font.family` and `font.color` from the active brand skill.
 - **Color cycle:** Use `colorway` from the active brand skill's color array. For sequential data, use tints of the brand primary. For categorical data, cycle through the full brand palette.
+- **Locked data category colors:** When a data category recurs across multiple dashboards or views (commodities like Residential / Commercial / Tourist, allocation statuses like Allocated / Jurisdiction / TRPA / Unreleased, etc.), use the **same color everywhere** that category appears. The active brand skill has the canonical mapping under "Locked data category colors" — defer to it. Don't reinvent a color scheme per dashboard; viewers learn the legend once and re-use it across the ecosystem.
 - **Number formatting:** Use `Plotly.d3.format` for consistent number display. Comma-separate thousands. No unnecessary decimals.
 - **Symbols in charts:** Per TRPA style guide, symbols (%, $, °) are acceptable in charts and tables even though they should be spelled out in body text.
 - **Annotations and titles:** Prefer chart section headings (via `<h3>` above the chart div) over Plotly's built-in title, which is harder to style consistently.
@@ -420,7 +424,8 @@ Every dashboard follows this structure. The template below uses EIP brand tokens
 ### AG Grid conventions
 
 - **Always enable** `sortable`, `filter`, and `resizable` on all columns via `defaultColDef`.
-- **Always enable pagination** with `paginationPageSize: 25`.
+- **Enable pagination** with `paginationPageSize: 25` for read-only reporting tables. Skip it when the grid is a working surface the user edits or scans top to bottom (ranking, picking, QA review): paging hides rows the user is comparing. Say so in a comment in the file.
+- **Text contrast in grids and labels:** EIP Blue `#007DC3` and TRPA Blue `#0072CE` fall just under 4.5:1 on white. Keep them for fills, icons, and large text; use a darker step (EIP `#0068A8`, or the brand navy) for text-sized links and labels. Check every tinted-background badge pair before shipping.
 - **Use `domLayout: 'autoHeight'`** when the grid is inside a tab or scrollable container. Use a fixed-height div (`style="height: 500px"`) when the grid is the main content.
 - **Include a CSV export button** using Calcite:
   ```html
@@ -440,7 +445,8 @@ Every dashboard follows this structure. The template below uses EIP brand tokens
 
 ### Calcite component conventions
 
-- **Page layout:** Use `calcite-shell` and `calcite-panel` for complex layouts, or the simple header/content pattern from the template for single-page dashboards.
+- **Page layout:** Use `calcite-shell` and `calcite-panel` for complex layouts, or the simple header/content pattern from the template for single-page dashboards. The maps.trpa.gov tools (`trpa-agency/maps`) share a hand-built flex shell (white header, left control panel, map with a table drawer); new tools in that repo follow it for consistency rather than `calcite-shell`.
+- **Custom controls need ARIA:** if a control is hand-built instead of a Calcite component (segmented buttons, tab strips, toggle chips), give it the matching roles and states: `role="tablist"`/`role="tab"` with `aria-selected` and `aria-controls`; `role="radiogroup"`/`role="radio"` with `aria-checked`; `aria-pressed` on toggle chips; a `label` attribute on every `calcite-combobox` and `calcite-switch` (a wrapping `<label>` does not reach inside a custom element); a global `:focus-visible` outline.
 - **Tabs:** Use `calcite-tabs` / `calcite-tab-nav` / `calcite-tab-title` / `calcite-tab` for switching between Charts, Map, and Data Table views.
 - **Filters:** Use `calcite-select` for dropdowns, `calcite-slider` for ranges, `calcite-switch` for toggles.
 - **Loading states:** Use `calcite-loader` while data is being fetched:
@@ -535,3 +541,17 @@ The Allocation Tracking dashboard at `trpa-agency.github.io/Reporting/html/alloc
 - Live data fetched from TRPA ArcGIS REST services
 - `calcite-notice` for data source attribution
 - Responsive layout that works on desktop and tablet
+
+---
+
+## Design system and tokens
+
+The living reference for these rules is the TRPA Design System page, with live specimens of every component and a brand switcher: https://maps.trpa.gov/tools/design-system.html (also served at https://trpa-agency.github.io/maps/tools/design-system.html).
+
+The token file it documents is `assets/trpa-tokens.css` in the `trpa-agency/maps` repo. Link it instead of pasting palette blocks:
+
+```html
+<link rel="stylesheet" href="https://maps.trpa.gov/assets/trpa-tokens.css" />
+```
+
+It defines the raw palettes (`--trpa-*`, `--eip-*`, `--tl-*`), the semantic tokens components read (`--brand-primary`, `--brand-primary-text`, `--brand-dark`, `--brand-accent`, `--brand-font`, `--brand-radius`, `--gray-bg`, `--gray-border`, `--gray-text`, `--status-*`, `--chart-1` to `--chart-8`), and the Calcite variable mapping. The agency layer is the default. Put `data-brand="eip"` or `data-brand="tahoe-living"` on `<html>` or `<body>` to switch everything inside it, and keep the page shell (header, footer, back link) agency blue. Write component CSS against the semantic tokens, not raw hex, so one tool can carry either brand.

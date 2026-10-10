@@ -10,9 +10,18 @@ A Claude plugin marketplace containing the skills used by Tahoe Regional Plannin
 | `trpa-eip-brand` | Lake Tahoe EIP brand — environmental program palette and styling |
 | `tahoe-living-brand` | Tahoe Living housing initiative brand — warm, community-focused identity |
 | `trpa-dashboard-stack` | Required tech stack for TRPA dashboards (Plotly + Calcite + ArcGIS SDK + AG Grid) |
+| `trpa-dashboard-qa` | Pre-deploy QA checklist for dashboards and web tools |
 | `trpa-data-services` | How to access TRPA's five data systems (ArcGIS Server, AGOL, LTInfo, Accela, GeoServer) |
 | `trpa-zoning-services` | Zoning and permissible-use REST endpoints, schemas, and join logic |
 | `trpa-climate-dashboard` | Climate Resilience Dashboard framework and patterns |
+
+## Design system
+
+The brand and stack skills are the machine-readable half of the TRPA Design System. The human half, with live specimens of every component and a brand switcher, is at https://maps.trpa.gov/tools/design-system.html (also https://trpa-agency.github.io/maps/tools/design-system.html). The shared token stylesheet those skills point to lives in the `trpa-agency/maps` repo at `assets/trpa-tokens.css`. When a rule changes, change it in both places.
+
+## Without Claude Code
+
+Cowork and claude.ai take a skill as an uploaded folder. Use **Code → Download ZIP** on this repo, unzip it, and upload the folder for the skill you want (for example `skills/trpa-brand`) through the Skills settings. You will not get automatic updates that way, so check back when the design system page changes.
 
 ## For TRPA staff — installing the skills
 
@@ -24,26 +33,24 @@ You need Claude Code or Cowork installed first.
 /plugin marketplace add trpa-agency/trpa-claude-skills
 ```
 
-(Replace `trpa-agency` with the actual GitHub org/user that ends up hosting this repo.)
-
 **Then install whichever plugins you want:**
 
 ```
-/plugin install trpa-brand
-/plugin install trpa-data-services
-/plugin install trpa-dashboard-stack
+/plugin install trpa-brand@trpa-claude-skills
+/plugin install trpa-dashboard-stack@trpa-claude-skills
+/plugin install trpa-data-services@trpa-claude-skills
 # ...etc
 ```
 
 Or install everything:
 
 ```
-/plugin install trpa-brand trpa-eip-brand tahoe-living-brand trpa-dashboard-stack trpa-data-services trpa-zoning-services trpa-climate-dashboard
+/plugin install trpa-brand@trpa-claude-skills trpa-eip-brand@trpa-claude-skills tahoe-living-brand@trpa-claude-skills trpa-dashboard-stack@trpa-claude-skills trpa-dashboard-qa@trpa-claude-skills trpa-data-services@trpa-claude-skills trpa-zoning-services@trpa-claude-skills trpa-climate-dashboard@trpa-claude-skills
 ```
 
 **To check what's installed:** `/plugin list`
 
-**To update:** Claude pulls the latest from this repo automatically. If you want to force-refresh, run `/plugin marketplace update trpa-agency/trpa-claude-skills`.
+**To update:** Claude pulls the latest from this repo automatically. If you want to force-refresh, run `/plugin marketplace update trpa-claude-skills`.
 
 ## For maintainers — adding or updating a skill
 
@@ -66,6 +73,7 @@ trpa-claude-skills/
     ├── tahoe-living-brand/
     ├── trpa-brand/
     ├── trpa-climate-dashboard/
+    ├── trpa-dashboard-qa/
     ├── trpa-dashboard-stack/
     ├── trpa-data-services/
     │   ├── SKILL.md

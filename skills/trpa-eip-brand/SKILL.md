@@ -149,6 +149,8 @@ const EIP_COLORS = ['#007DC3', '#6EBE44', '#F16022', '#0B1F41'];
 5. **Backgrounds:** White or light tints. Navy for dark-mode/footer.
 6. **Avoid pure black and pure gray** — tint grays toward navy.
 7. **Charts:** Cycle Blue → Green → Orange → Navy.
+8. **Priority or status ramps (good, middling, poor):** use the derived ramp `#2F6B13` (darkened EIP Green), `#735A00` (earth tone), `#B5430E` (darkened EIP Orange) on the tints `#E8F5E0`, `#FFF4CC`, `#FDE8DC`. Each text-on-tint pair clears 4.5:1, which the raw palette colors do not. Used for Priority 1, 2, 3 in EIP Funding Priorities.
+9. **Text contrast:** EIP Blue `#007DC3` measures 4.45:1 on white, just under AA for text. Use it for fills, icons, rings, and large headings; for text-sized links and labels use `#0068A8` or EIP Navy.
 
 ---
 
@@ -164,3 +166,17 @@ const EIP_COLORS = ['#007DC3', '#6EBE44', '#F16022', '#0B1F41'];
 | Logo | Lake silhouette | Mountain/water icon |
 
 Both brands share the PMS 285 blue family as their connecting thread. When building tools that span both brands, use TRPA brand for the structural shell and EIP colors within the content area.
+
+---
+
+## Design system and tokens
+
+The living reference for these rules is the TRPA Design System page, with live specimens of every component and a brand switcher: https://maps.trpa.gov/tools/design-system.html (also served at https://trpa-agency.github.io/maps/tools/design-system.html).
+
+The token file it documents is `assets/trpa-tokens.css` in the `trpa-agency/maps` repo. Link it instead of pasting palette blocks:
+
+```html
+<link rel="stylesheet" href="https://maps.trpa.gov/assets/trpa-tokens.css" />
+```
+
+It defines the raw palettes (`--trpa-*`, `--eip-*`, `--tl-*`), the semantic tokens components read (`--brand-primary`, `--brand-primary-text`, `--brand-dark`, `--brand-accent`, `--brand-font`, `--brand-radius`, `--gray-bg`, `--gray-border`, `--gray-text`, `--status-*`, `--chart-1` to `--chart-8`), and the Calcite variable mapping. The agency layer is the default. Put `data-brand="eip"` or `data-brand="tahoe-living"` on `<html>` or `<body>` to switch everything inside it, and keep the page shell (header, footer, back link) agency blue. Write component CSS against the semantic tokens, not raw hex, so one tool can carry either brand.

@@ -431,3 +431,17 @@ Example labels:
 | Dashboard tech stack (always)    | `trpa-dashboard-stack` |
 
 Tahoe Living is a **sub-brand** of TRPA. The TRPA logo appears in the footer for credibility, but the header, colors, and feel are entirely Tahoe Living. When building dashboards for housing data that will live on tahoeliving.org or be embedded in Tahoe Living materials, use this brand. When building the same housing data for an internal TRPA report or trpa.gov page, use `trpa-brand` instead.
+
+---
+
+## Design system and tokens
+
+The living reference for these rules is the TRPA Design System page, with live specimens of every component and a brand switcher: https://maps.trpa.gov/tools/design-system.html (also served at https://trpa-agency.github.io/maps/tools/design-system.html).
+
+The token file it documents is `assets/trpa-tokens.css` in the `trpa-agency/maps` repo. Link it instead of pasting palette blocks:
+
+```html
+<link rel="stylesheet" href="https://maps.trpa.gov/assets/trpa-tokens.css" />
+```
+
+It defines the raw palettes (`--trpa-*`, `--eip-*`, `--tl-*`), the semantic tokens components read (`--brand-primary`, `--brand-primary-text`, `--brand-dark`, `--brand-accent`, `--brand-font`, `--brand-radius`, `--gray-bg`, `--gray-border`, `--gray-text`, `--status-*`, `--chart-1` to `--chart-8`), and the Calcite variable mapping. The agency layer is the default. Put `data-brand="eip"` or `data-brand="tahoe-living"` on `<html>` or `<body>` to switch everything inside it, and keep the page shell (header, footer, back link) agency blue. Write component CSS against the semantic tokens, not raw hex, so one tool can carry either brand.

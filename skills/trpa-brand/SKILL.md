@@ -212,6 +212,92 @@ const TRPA_LAYOUT = {
 };
 ```
 
+### Locked data category colors
+
+**Rule:** When the same data category appears across multiple dashboards (or
+multiple views inside one dashboard), it must use the **same color everywhere**.
+Color is a category identifier - if "Residential" is green on one chart and
+blue on another, viewers re-learn the legend every time and lose trust in the
+visual.
+
+Two color conventions apply, and they're independent of each other:
+
+#### 1. Commodity colors (the regulated development categories)
+
+These identify *what kind of development right* a number represents. Used as
+the top stripe / left border / card accent on commodity tiles, KPI cards, and
+chart facets.
+
+| Commodity | CSS variable | Hex | Pantone |
+|---|---|---|---|
+| **Residential** allocations | `--trpa-forest` | `#4A6118` | PMS 378 |
+| **Residential Bonus Units** | `--trpa-olive` | `#B5A64C` | PMS 618 |
+| **Commercial Floor Area** | `--trpa-earth` | `#B47E00` | PMS 1395 |
+| **Tourist Accommodation Units** | `--trpa-purple` | `#7B6A8A` | PMS 667 |
+
+JS reference dict:
+
+```javascript
+const COMMODITY_COLOR = {
+  residential: '#4A6118',   // TRPA forest (brand green)
+  rbu:         '#B5A64C',   // TRPA olive
+  commercial:  '#B47E00',   // TRPA earth
+  tourist:     '#7B6A8A',   // TRPA purple
+};
+```
+
+#### 2. Allocation status colors (the lifecycle states)
+
+These identify *where a development right is in its lifecycle* - drawn down vs
+still in a pool. Used as segment colors in stacked bars, KPI accents, and any
+"how much is used / available" view. **Fixed across all commodities** - don't
+re-map status colors by commodity (that would make "Allocated for residential"
+and "Residential commodity" both green, which blurs adjacent segments).
+
+| Status | CSS variable | Hex | Semantic |
+|---|---|---|---|
+| **Allocated** to private development (built or in-progress) | `--trpa-forest` | `#4A6118` | green = done / complete |
+| **Jurisdiction pool** (released, available in county/city) | `--trpa-blue` | `#0072CE` | active pool color |
+| **TRPA pool** (held centrally, not metered to a jurisdiction) | `--trpa-ice` | `#B4CBE8` | held in reserve |
+| **Unreleased** (cap-authorized but not yet metered out) | `--trpa-orange` | `#E87722` | future / pending |
+
+JS reference dict:
+
+```javascript
+const STATUS_COLOR = {
+  allocated:    '#4A6118',  // forest
+  jurisdiction: '#0072CE',  // TRPA blue
+  trpa_pool:    '#B4CBE8',  // ice
+  unreleased:   '#E87722',  // orange
+};
+```
+
+#### Putting it together: a commodity tile
+
+A typical "stacked-bar tile per commodity" combines both palettes:
+
+- **Top 4px stripe** = commodity color (forest for residential, earth for commercial, etc.)
+- **Stacked bar segments** = status colors (forest / blue / ice / orange)
+- **Tile heading text** = the commodity name in plain text
+
+The commodity stripe identifies *what this tile is*; the segments identify
+*where each unit lives in its lifecycle*. Residential's stripe and its
+"Allocated" segment can both be forest because they sit in different visual
+positions (header vs. body) - viewers don't conflate them.
+
+#### Other category conventions
+
+- **Residential additions by source** (5 series: Allocations / Bonus Units / Transfers / Conversions / From Banked) - keep the per-source colors used in `residential-additions-by-source.html`: blue / forest / orange / earth / purple respectively. These are SOURCE identifiers, distinct from commodity and status.
+- **Removed-units series** (To Bank / To Conversion) - use brick (`#9C3E27`) and earth (`#B47E00`) to signal "removed from the on-the-ground count" (brick reads as negative / loss).
+- **YoY positive deltas** = use the commodity color of the panel; **YoY negative deltas** = brick (`#9C3E27`). The brick override flags "this bar went the wrong way."
+
+#### When in doubt
+
+If you're adding a new category that doesn't fit an existing convention,
+prefer to **document the new mapping in this skill** rather than invent a
+one-off. The goal is that any number a viewer sees in any dashboard reads as
+the *same thing* if it's the same color.
+
 ---
 
 ## TRPA Ecosystem of Sites
@@ -244,3 +330,17 @@ const TRPA_LAYOUT = {
 | Dashboard tech stack (always pair with)  | `trpa-dashboard-stack`    |
 
 All sub-brands share **TRPA Blue (PMS 285C / `#0072CE`)** as a connecting thread.
+
+---
+
+## Design system and tokens
+
+The living reference for these rules is the TRPA Design System page, with live specimens of every component and a brand switcher: https://maps.trpa.gov/tools/design-system.html (also served at https://trpa-agency.github.io/maps/tools/design-system.html).
+
+The token file it documents is `assets/trpa-tokens.css` in the `trpa-agency/maps` repo. Link it instead of pasting palette blocks:
+
+```html
+<link rel="stylesheet" href="https://maps.trpa.gov/assets/trpa-tokens.css" />
+```
+
+It defines the raw palettes (`--trpa-*`, `--eip-*`, `--tl-*`), the semantic tokens components read (`--brand-primary`, `--brand-primary-text`, `--brand-dark`, `--brand-accent`, `--brand-font`, `--brand-radius`, `--gray-bg`, `--gray-border`, `--gray-text`, `--status-*`, `--chart-1` to `--chart-8`), and the Calcite variable mapping. The agency layer is the default. Put `data-brand="eip"` or `data-brand="tahoe-living"` on `<html>` or `<body>` to switch everything inside it, and keep the page shell (header, footer, back link) agency blue. Write component CSS against the semantic tokens, not raw hex, so one tool can carry either brand.
