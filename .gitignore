@@ -10,3 +10,6 @@ desktop.ini
 # Eval / iteration artifacts (skills are the deliverable; evals stay local)
 *-workspace/
 **/evals/
+
+# per-skill zips for manual upload to claude.ai (build with the reconcile script)
+dist/
