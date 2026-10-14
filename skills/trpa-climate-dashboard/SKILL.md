@@ -283,14 +283,16 @@ Indicators 2.1.a (treated areas), 2.1.c (fire probability), 2.3.a (restored wetl
 
 ## Status Indicators
 
-Some metrics have targets or thresholds. Display status using the Climate Dashboard status colors:
+Some metrics have targets or thresholds. Display status using the platform status colors:
 
-| Status | Meaning | Color | Token |
-|--------|---------|-------|-------|
-| On track | Meeting or exceeding target | `#27AE60` | `--climate-green` |
-| Caution | Within range but trending wrong | `#F39C12` | `--climate-amber` |
-| Off track | Below target | `#E74C3C` | `--climate-red` |
-| No target | Informational only | `#0072CE` | `--climate-primary` |
+| Status | Meaning | Color (platform token) |
+|--------|---------|-------|
+| On track | Meeting or exceeding target | `#188c16` (`--green-dark`) |
+| Caution | Within range but trending wrong | `#efd13d` (`--yellow-dark`) |
+| Off track | Below target | `#be4c4c` (`--red-dark`) |
+| No target | Informational only | `#3e72b0` (`--primary`) |
+
+These are the same four the Threshold Dashboard charts use, so the two sites agree.
 
 Include target lines on Plotly charts where applicable:
 
@@ -300,14 +302,14 @@ const targetLine = {
   type: 'line',
   x0: xMin, x1: xMax,
   y0: targetValue, y1: targetValue,
-  line: { color: '#27AE60', width: 2, dash: 'dash' }
+  line: { color: '#4e4e4e', width: 2, dash: 'dash' }
 };
 layout.shapes = [targetLine];
 layout.annotations = [{
   x: xMax, y: targetValue,
   text: 'Target',
   showarrow: false,
-  font: { size: 11, color: '#27AE60' },
+  font: { size: 11, color: '#4e4e4e' },
   xanchor: 'left'
 }];
 ```
