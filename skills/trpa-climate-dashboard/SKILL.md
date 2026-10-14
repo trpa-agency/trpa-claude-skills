@@ -10,132 +10,42 @@ Reference skill for building and extending the **Climate Resilience Dashboard** 
 **Always pair this skill with:**
 - `trpa-dashboard-stack` for the tech stack (Plotly, Calcite, ArcGIS, AG Grid)
 
-**Do NOT use** `trpa-brand`, `trpa-eip-brand`, or `tahoe-living-brand` for this dashboard. The Climate Resilience Dashboard lives on the **Lake Tahoe Info (LT Info) platform**, which has its own visual identity described below.
+**Do NOT use** `trpa-brand`, `trpa-eip-brand`, or `tahoe-living-brand` for this dashboard. The Climate Resilience Dashboard lives on the **Lake Tahoe Info (LT Info) platform**, whose identity is documented in `ltinfo-platform`; load that skill with this one.
 
 ---
 
-## LT Info Platform Identity
+## LT Info platform identity
 
-The Climate Resilience Dashboard is part of the **laketahoeinfo.org** family of dashboards — a data platform that is related to but visually distinct from trpa.gov. All LT Info dashboards share a common shell: a top nav bar, an "Explore" dropdown linking to sibling dashboards, and a partner-logo footer.
+The Climate Resilience Dashboard is one of the laketahoeinfo.org dashboards and takes the platform's shell and styling: Lexend Deca, the navy header, the Explore menu, and the partner footer. The shell, the design tokens sampled from the live site, the embed contract, and the stack facts live in the `ltinfo-platform` skill. Load it with this one. The palette that an earlier version of this skill described (charcoal `#2C3E50`, teal `#1ABC9C`, Open Sans) does not exist on the live site and must not be used.
 
-### LT Info color palette
+Outcome pages have no cards. Each goal carries its own color, set in the CMS and returned by the API as `GoalColor`:
 
-LT Info uses a **dark charcoal/slate** header (not TRPA Blue) with a teal-green accent. The palette is more neutral and data-focused than the TRPA agency brand.
+| Goal | Name | Color |
+|---|---|---|
+| 1 | Track Changing Climate Conditions | `#A9BCB0` |
+| 2 | Support a Resilient Environment | `#E88670` |
+| 3 | Promote a Resilient Built Environment | `#384960` |
+| 4 | Increase Community Resilience | `#4C7D60` |
 
-```css
-:root {
-  /* LT Info platform colors */
-  --lti-charcoal:     #2C3E50;   /* Header, nav bar, dark backgrounds */
-  --lti-teal:         #1ABC9C;   /* Active nav, accent, links */
-  --lti-teal-dark:    #16A085;   /* Hover states */
-  --lti-blue:         #3498DB;   /* Secondary accent, info states */
-  --lti-text:         #2C3E50;   /* Body text */
-  --lti-text-muted:   #7F8C8D;   /* Captions, secondary text */
-  --lti-bg:           #ECF0F1;   /* Page background (light gray) */
-  --lti-white:        #FFFFFF;   /* Card surfaces */
-  --lti-border:       #BDC3C7;   /* Borders, dividers */
+### Chart colors
 
-  /* Climate dashboard accent — can use TRPA Blue for charts */
-  --climate-primary:  #0072CE;   /* TRPA Blue — chart primary series */
-  --climate-green:    #27AE60;   /* Positive/nature indicators */
-  --climate-amber:    #F39C12;   /* Caution/warning */
-  --climate-red:      #E74C3C;   /* Off-track/critical */
-}
-```
+Chart pages use the platform layout from `ltinfo-platform` (Lexend Deca, ink `#333333`, grid `#dcdcdc`, white background, hover `x unified`) with the platform colorway, `#3e72b0` first. A goal's color may mark the goal's own series in a cross-goal chart. Status against a target uses green `#188c16`, amber `#efd13d`, red `#be4c4c`, and gray `#8a8a8a` for no target, the same scale the Threshold Dashboard charts use, so the two sites agree.
 
-### LT Info header bar
+### How an outcome page is assembled
 
-The LT Info nav bar is a **dark charcoal** (`#2C3E50`) bar with white text and the LT Info logo (not the TRPA agency logo). It includes an "Explore" dropdown linking to all sibling dashboards.
+The page calls `/climate-resilience-outcomes/slug/{OutcomeSlug}` and renders, in order: the outcome name, Introduction (`Text1`), the pull quote, "How is this outcome being measured?" with one block per indicator, Key Points and Background (`Text2`), Learn More (`Text5`), What are Partners Doing? (`Text4`), What can individuals do? (`Text3`), and Related Outcomes (`RelatedOutcomeIDs`). Each indicator block embeds up to three iframes with `allow="fullscreen"`:
 
-```html
-<nav class="lti-header" style="background: #2C3E50; color: #fff; padding: 0 1.5rem; display: flex; align-items: center; height: 56px;">
-  <a href="https://www.laketahoeinfo.org/">
-    <img src="https://www.laketahoeinfo.org/Content/img/LT_INFO_LOGO2025-white.png" alt="Lake Tahoe Info" height="32" />
-  </a>
-  <a href="https://climate.laketahoeinfo.org/" style="color: #1ABC9C; margin-left: 1.5rem; font-weight: 600; text-decoration: none;">
-    Climate Resilience Dashboard
-  </a>
-  <!-- Explore dropdown linking to sibling dashboards -->
-</nav>
-```
+| iframe class | Source field | Content |
+|---|---|---|
+| `primary-chart` | the indicator's registered chart | the main chart |
+| `map` | `IndicatorMapUrl` | the indicator map |
+| `secondary-chart` | each item in `AdditionalCharts` | additional metrics, with the title from the list |
 
-### LT Info typography
+`ResilienceDashboardInterpretation` renders between the chart and the map with an "Indicator Map" subheading. The hero image is `PictureUrl`, hosted in the repo's `html/images/`.
 
-LT Info uses **system fonts / Open Sans** — consistent with the TRPA agency web style but not Lexend Deca (EIP) or Montserrat (Tahoe Living):
+### API routes
 
-```css
-body {
-  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--lti-text);
-  background: var(--lti-bg);
-}
-```
-
-### LT Info footer
-
-All LT Info dashboards include a footer with TRPA and partner logos (EPA, SGC, USFS, Caltrans, FHWA, NDEP, TRCD) plus implementation credit to ESA:
-
-```html
-<footer style="background: #2C3E50; color: rgba(255,255,255,0.7); padding: 2rem; font-size: 0.8rem; text-align: center;">
-  <div>This site brought to you by <a href="https://trpa.gov" style="color: #1ABC9C;">TRPA</a> with funding provided by</div>
-  <!-- Partner logo row -->
-  <div style="margin-top: 1rem;">
-    <img src="https://www.laketahoeinfo.org/Content/img/trpa-logo-footer.png" alt="TRPA" height="30" style="margin: 0 0.5rem;" />
-    <!-- EPA, SGC, USFS, Caltrans, FHWA, NDEP, TRCD logos -->
-  </div>
-  <div style="margin-top: 1rem;">Implementation & Hosting by <a href="https://esassoc.com/services/technology/" style="color: #1ABC9C;">Environmental Science Associates</a></div>
-</footer>
-```
-
-### Sibling dashboards (Explore dropdown)
-
-The nav includes links to all LT Info dashboards. Include these in the Explore dropdown:
-
-- [Climate Resilience Dashboard](https://climate.laketahoeinfo.org/)
-- [EIP Project Tracker](https://eip.laketahoeinfo.org/)
-- [Lake Clarity Tracker](https://clarity.laketahoeinfo.org/)
-- [Monitoring Dashboard](https://monitoring.laketahoeinfo.org/)
-- [Parcel Tracker](https://parcels.laketahoeinfo.org/)
-- [Threshold Dashboard](https://thresholds.laketahoeinfo.org/)
-- [Transportation Tracker](https://transportation.laketahoeinfo.org/)
-
-### Chart colors for Climate Dashboard
-
-Use TRPA Blue (`#0072CE`) as the primary chart color — this maintains the connection to TRPA while sitting inside the LT Info shell. The full chart colorway:
-
-```javascript
-const CLIMATE_COLORS = [
-  '#0072CE',  // TRPA Blue (primary series)
-  '#27AE60',  // Green (environmental/positive)
-  '#F39C12',  // Amber (caution)
-  '#E74C3C',  // Red (off-track)
-  '#3498DB',  // LT Info blue (secondary)
-  '#8E44AD',  // Purple (social/equity data)
-  '#1ABC9C',  // Teal (LT Info accent)
-  '#95A5A6',  // Muted gray (background category)
-];
-```
-
-### Plotly.js layout for Climate Dashboard
-
-```javascript
-const CLIMATE_LAYOUT = {
-  font: {
-    family: 'Open Sans, system-ui, sans-serif',
-    color: '#2C3E50',
-    size: 13
-  },
-  paper_bgcolor: 'transparent',
-  plot_bgcolor: 'transparent',
-  margin: { t: 30, r: 20, b: 40, l: 50 },
-  xaxis: { gridcolor: '#e0e0e0', linecolor: '#BDC3C7' },
-  yaxis: { gridcolor: '#e0e0e0', linecolor: '#BDC3C7' },
-  colorway: ['#0072CE', '#27AE60', '#F39C12', '#E74C3C', '#3498DB', '#8E44AD', '#1ABC9C'],
-  hoverlabel: { font: { family: 'Open Sans, sans-serif' } }
-};
-```
+Base `https://internalapi.laketahoeinfo.org`, anonymous GET: `/climate-resilience-goals` (4 goals with `GoalColor` and nested `Outcomes`), `/climate-resilience-outcomes` (14 outcomes with `OutcomeSlug`, `DisplayOutcomeNumber`, texts, `PictureUrl`, `PullQuote`), `/climate-resilience-outcomes/slug/{slug}` (one outcome with `Indicators[]`, each carrying `IndicatorNumber`, `AdditionalCharts` HTML, `IndicatorMapUrl`, `ResilienceDashboardDescription`, `ResilienceDashboardInterpretation`, and the platform `Indicator` record), and `/file-resources/{guid}` for the goal and outcome icons.
 
 ---
 
@@ -269,7 +179,7 @@ https://trpa-agency.github.io/ClimateResilienceDashboard/html/{filename}.html
 
 These files follow the `trpa-dashboard-stack` patterns (Plotly.js, AG Grid, ArcGIS Maps SDK) but are **lightweight, embeddable chart pages** — not full dashboard pages with headers and footers. They may be displayed in iframes or linked directly from the CMS.
 
-**Keep chart pages minimal:** No LT Info header/footer chrome. Just the visualization itself with a clean white/transparent background so it embeds cleanly into the CMS page.
+**Keep chart pages minimal:** No LT Info header/footer chrome. Just the visualization itself on a white background so it embeds cleanly into the CMS page. Load Plotly from a CDN; the 2024 chart files are Python `write_html` exports with the 3.6 MB library inlined and the default template, and new files should not copy them. `extreme-heat-days-mobile.html` (CDN Plotly, Lexend Deca) is the pattern to follow.
 
 Maps go in a separate subfolder:
 ```
@@ -306,10 +216,10 @@ Each of the 4 goals has a distinct color configured in the CMS (via the "Other 2
 
 | Goal | Name | Color |
 |------|------|-------|
-| Goal 1 | Track Changing Climate Conditions | `#A9BCB0` (sage/muted green) |
-| Goal 2 | Support a Resilient Environment | Configured per goal in CMS |
-| Goal 3 | Promote a Resilient Built Environment | Configured per goal in CMS |
-| Goal 4 | Increase Community Resilience | Configured per goal in CMS |
+| Goal 1 | Track Changing Climate Conditions | `#A9BCB0` |
+| Goal 2 | Support a Resilient Environment | `#E88670` |
+| Goal 3 | Promote a Resilient Built Environment | `#384960` |
+| Goal 4 | Increase Community Resilience | `#4C7D60` |
 
 These colors appear as the goal card backgrounds on the main dashboard page. The hex codes are entered in the CMS admin — not hardcoded in the chart HTML files.
 

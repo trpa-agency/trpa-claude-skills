@@ -42,6 +42,26 @@
       "description": "TRPA zoning and permissible-use data services. REST endpoints, field schemas, and join logic for zoning districts, permitted uses, tolerance districts, special designations, and parcel attributes."
     },
     {
+      "name": "ltinfo-platform",
+      "source": "./skills/ltinfo-platform",
+      "description": "Lake Tahoe Info platform reference: the shared shell, design tokens sampled from the live site, embed contract, anonymous API conventions, and stack facts for every laketahoeinfo.org dashboard. Load with any LT Info dashboard skill."
+    },
+    {
+      "name": "trpa-threshold-dashboard",
+      "source": "./skills/trpa-threshold-dashboard",
+      "description": "Threshold Dashboard (thresholds.laketahoeinfo.org): the 10 categories and theme colors, 192 indicators, the 13-section indicator page and its API fields, status and trend vocabulary, and the ThresholdEvaluation GitHub Pages conventions for the charts and maps TRPA embeds."
+    },
+    {
+      "name": "trpa-monitoring-dashboard",
+      "source": "./skills/trpa-monitoring-dashboard",
+      "description": "Monitoring Dashboard (monitoring.laketahoeinfo.org): program types and categories, page anatomy, the Dashboard card embed contract, host styling, API routes, the Forest Health reference dashboards, and maps.trpa.org data patterns."
+    },
+    {
+      "name": "trpa-transportation-tracker",
+      "source": "./skills/trpa-transportation-tracker",
+      "description": "Transportation Tracker (transportation.laketahoeinfo.org): site sections, the six strategies and colors, project stages, API routes and JSON shapes, Data Trend embeds, and the TRPA repos that produce the transportation monitoring data."
+    },
+    {
       "name": "trpa-climate-dashboard",
       "source": "./skills/trpa-climate-dashboard",
       "description": "Climate Resilience Dashboard for Lake Tahoe (climate.laketahoeinfo.org). 4-goal indicator framework, 33 metrics, data sources, visualization types, and page patterns."
