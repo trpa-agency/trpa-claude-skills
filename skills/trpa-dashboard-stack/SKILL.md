@@ -24,10 +24,11 @@ Every dashboard must use these four libraries. **Load order matters: Calcite, th
 Calcite provides the page layout, panels, buttons, dropdowns, tabs, loaders, modals, and all structural UI. It is the design system — do not use Bootstrap, Tailwind, or other CSS frameworks alongside it.
 
 ```html
-<!-- Calcite Design System v5.0 -->
+<!-- Calcite Design System v5.0: the module script alone -->
 <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
-<link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/5.0/calcite.css" />
 ```
+
+The 5.0 CDN path redirects to `5.0/index.js`, a lazy-loading build that injects its own styles. There is no `5.0/calcite.css` or `5.0/calcite.esm.js` (both 404, verified Oct. 13, 2026), so do not add a stylesheet link. Only the 2.x and 3.x builds pair `{version}/calcite.esm.js` with `{version}/calcite.css`.
 
 ### 2. ArcGIS Maps SDK for JavaScript (maps and spatial)
 
@@ -117,9 +118,8 @@ Every dashboard follows this structure. The template below uses EIP brand tokens
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TITLE — TRPA</title>
 
-  <!-- Calcite -->
+  <!-- Calcite (5.0 has no separate stylesheet) -->
   <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
-  <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/5.0/calcite.css" />
 
   <!-- Plotly.js and AG Grid BEFORE the ArcGIS SDK: once Dojo defines an AMD loader,
        UMD bundles register as anonymous modules instead of globals -->
