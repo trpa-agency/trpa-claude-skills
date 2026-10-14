@@ -21,7 +21,7 @@ A Claude plugin marketplace containing the skills used by Tahoe Regional Plannin
 
 ## Design system
 
-The brand and stack skills are the machine-readable half of the TRPA Design System. The human half, with live specimens of every component and a brand switcher, is at https://maps.trpa.gov/tools/design-system.html (also https://trpa-agency.github.io/maps/tools/design-system.html). The shared token stylesheet those skills point to lives in the `trpa-agency/maps` repo at `assets/trpa-tokens.css`. When a rule changes, change it in both places.
+The brand and stack skills are the machine-readable half of the TRPA Design System. The human half, with live specimens of every component and a brand switcher, is at https://apps.trpa.gov/tools/design-system.html (also https://trpa-agency.github.io/maps/tools/design-system.html). The shared token stylesheet those skills point to lives in the `trpa-agency/maps` repo at `assets/trpa-tokens.css`. When a rule changes, change it in both places.
 
 ## Lake Tahoe Info dashboards
 
