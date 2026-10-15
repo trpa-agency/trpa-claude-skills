@@ -25,7 +25,7 @@ Sampled from the live sites on Oct. 13, 2026. The sites are JavaScript-rendered,
 
 ## The rule that matters most
 
-Embeds match the host, not a TRPA brand. An LT Info page is Lexend Deca on white and light gray, with the dashboard's own accent color on card headers. The TRPA agency blue, the EIP palette, and the Tahoe Living palette belong on trpa.gov, apps.trpa.gov, and outreach materials. Inside an LT Info page they look pasted in. Use the tokens below.
+Embeds match the host, not a TRPA brand. An LT Info page is Lexend Deca on white and light gray, with the dashboard's own accent color on card headers. The TRPA agency blue, the EIP palette, and the Tahoe Living palette belong on trpa.gov, tools.trpa.gov, and outreach materials. Inside an LT Info page they look pasted in. Use the tokens below.
 
 ---
 
@@ -48,7 +48,7 @@ The chrome is the CMS's job. An embed never reproduces any of it.
 
 The site defines 167 custom properties on `:root`. These are the ones embeds use. Values are hex as served.
 
-The TRPA design system mirrors them as a preview layer: `assets/trpa-tokens.css` in the `trpa-agency/maps` repo has a `[data-brand="ltinfo"]` block that maps these values onto the `--brand-*`, `--gray-*`, `--status-*`, `--chart-*`, and Calcite variables, and the page at https://apps.trpa.gov/tools/design-system.html (also trpa-agency.github.io/maps/tools/design-system.html) has a Lake Tahoe Info embeds section with the palette, slot sizes, and contract. Use the layer to prototype an embed with the shared components; the values here are the source.
+The TRPA design system mirrors them as a preview layer: `assets/trpa-tokens.css` in the `trpa-agency/tools` repo has a `[data-brand="ltinfo"]` block that maps these values onto the `--brand-*`, `--gray-*`, `--status-*`, `--chart-*`, and Calcite variables, and the page at https://tools.trpa.gov/qa/general/design-system.html (trpa-agency.github.io/tools/qa/general/design-system.html until DNS is live; the link drops `qa/` when the page is promoted) has a Lake Tahoe Info embeds section with the palette, slot sizes, and contract. Use the layer to prototype an embed with the shared components; the values here are the source.
 
 ### Brand and semantic
 

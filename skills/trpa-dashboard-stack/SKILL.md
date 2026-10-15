@@ -445,7 +445,7 @@ Every dashboard follows this structure. The template below uses EIP brand tokens
 
 ### Calcite component conventions
 
-- **Page layout:** Use `calcite-shell` and `calcite-panel` for complex layouts, or the simple header/content pattern from the template for single-page dashboards. The apps.trpa.gov tools (`trpa-agency/maps`) share a hand-built flex shell (white header, left control panel, map with a table drawer); new tools in that repo follow it for consistency rather than `calcite-shell`.
+- **Page layout:** Use `calcite-shell` and `calcite-panel` for complex layouts, or the simple header/content pattern from the template for single-page dashboards. The TRPA Tools apps (tools.trpa.gov, `trpa-agency/tools`) share a hand-built flex shell (white header, left control panel, map with a table drawer); new tools in that repo follow it for consistency rather than `calcite-shell`.
 - **Custom controls need ARIA:** if a control is hand-built instead of a Calcite component (segmented buttons, tab strips, toggle chips), give it the matching roles and states: `role="tablist"`/`role="tab"` with `aria-selected` and `aria-controls`; `role="radiogroup"`/`role="radio"` with `aria-checked`; `aria-pressed` on toggle chips; a `label` attribute on every `calcite-combobox` and `calcite-switch` (a wrapping `<label>` does not reach inside a custom element); a global `:focus-visible` outline.
 - **Tabs:** Use `calcite-tabs` / `calcite-tab-nav` / `calcite-tab-title` / `calcite-tab` for switching between Charts, Map, and Data Table views.
 - **Filters:** Use `calcite-select` for dropdowns, `calcite-slider` for ranges, `calcite-switch` for toggles.
@@ -546,12 +546,14 @@ The Allocation Tracking dashboard at `trpa-agency.github.io/Reporting/html/alloc
 
 ## Design system and tokens
 
-The living reference for these rules is the TRPA Design System page, with live specimens of every component and a brand switcher: https://apps.trpa.gov/tools/design-system.html (also served at https://trpa-agency.github.io/maps/tools/design-system.html).
+The living reference for these rules is the TRPA Design System page, with live specimens of every component and a brand switcher: https://tools.trpa.gov/qa/general/design-system.html (served at https://trpa-agency.github.io/tools/qa/general/design-system.html until the tools.trpa.gov DNS is live).
 
-The token file it documents is `assets/trpa-tokens.css` in the `trpa-agency/maps` repo. Link it instead of pasting palette blocks:
+Beta apps on TRPA Tools live under `qa/<category>/`. When an app is promoted, its link drops the `qa/` segment (the Design System would move to `general/design-system.html`).
+
+The token file it documents is `assets/trpa-tokens.css` in the `trpa-agency/tools` repo. Link it instead of pasting palette blocks:
 
 ```html
-<link rel="stylesheet" href="https://apps.trpa.gov/assets/trpa-tokens.css" />
+<link rel="stylesheet" href="https://trpa-agency.github.io/tools/assets/trpa-tokens.css" />
 ```
 
 It defines the raw palettes (`--trpa-*`, `--eip-*`, `--tl-*`), the semantic tokens components read (`--brand-primary`, `--brand-primary-text`, `--brand-dark`, `--brand-accent`, `--brand-font`, `--brand-radius`, `--gray-bg`, `--gray-border`, `--gray-text`, `--status-*`, `--chart-1` to `--chart-8`), and the Calcite variable mapping. The agency layer is the default. Put `data-brand="eip"` or `data-brand="tahoe-living"` on `<html>` or `<body>` to switch everything inside it, and keep the page shell (header, footer, back link) agency blue. Write component CSS against the semantic tokens, not raw hex, so one tool can carry either brand.
