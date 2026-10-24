@@ -126,15 +126,20 @@ def check_handoff_date(repo):
     if updated > date.today():
         record("WARN", "HANDOFF.md", f"last updated {updated} is in the future")
 
-    # Latest commit that touched something other than docs/ and CLAUDE.md.
-    last_code = (git(repo, "log", "-1", "--format=%cs", "--", ".", ":(exclude)docs", ":(exclude)CLAUDE.md") or "").strip()
-    if last_code:
-        try:
-            last_code_date = datetime.strptime(last_code, "%Y-%m-%d").date()
-        except ValueError:
-            last_code_date = None
-        if last_code_date and last_code_date > updated:
-            record("FAIL", "HANDOFF.md", f"last updated {updated} but code changed in a commit on {last_code_date}. Rewrite the handoff.")
+    # Compare commit order, not dates: a commit's date depends on the committer's
+    # time zone, and this check runs on machines that are not all in the same one.
+    # Stale means the latest commit that touched code is not an ancestor of (or the
+    # same as) the latest commit that touched HANDOFF.md.
+    if (git(repo, "status", "--porcelain", "--", "docs/HANDOFF.md") or "").strip():
+        record("PASS", "HANDOFF.md", f"dated {updated}; being rewritten now (uncommitted), so staleness is not checked")
+        return
+    last_code = (git(repo, "log", "-1", "--format=%H", "--", ".", ":(exclude)docs", ":(exclude)CLAUDE.md") or "").strip()
+    last_handoff = (git(repo, "log", "-1", "--format=%H", "--", "docs/HANDOFF.md") or "").strip()
+    if last_code and last_handoff and last_code != last_handoff:
+        ancestor = git(repo, "merge-base", "--is-ancestor", last_code, last_handoff)
+        if ancestor is None:
+            when = (git(repo, "log", "-1", "--format=%cs", last_code) or "").strip()
+            record("FAIL", "HANDOFF.md", f"last updated {updated} but code changed in commit {last_code[:7]} ({when}) after the handoff was written. Rewrite the handoff.")
             return
     record("PASS", "HANDOFF.md", f"dated {updated}, no code commits after it")
 
