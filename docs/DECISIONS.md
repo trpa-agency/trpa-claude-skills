@@ -2,6 +2,12 @@
 
 Newest first. One entry per decision someone could reasonably re-litigate. Record the why, not the what; the what is in git.
 
+## 2026-10-23: Pod engagement docs live in the tools repo, the process lives here as trpa-pod
+
+**Why:** Department engagement folders, the intake template, and the beta app scaffold sit in `trpa-agency/tools` next to the betas they produce, so an engagement and its output share one repo and one commit history. The process itself is a skill here so every machine and staff member runs an engagement the same way. The tools repo is public, so engagement notes are role-level only, and the skill repeats that rule.
+**Alternatives considered:** Everything in the skills repo (separates engagements from their outputs); everything in the tools repo (process does not reach other machines as a skill).
+**Revisit if:** engagements start producing mostly non-app outputs and the tools repo stops being the natural home.
+
 ## 2026-10-23: Keep one plugin per skill in the marketplace
 
 **Why:** Staff already install skills individually and the README documents that flow. One bundled plugin would be one install and one update, but it would break every existing install and force a reinstall.
