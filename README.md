@@ -19,6 +19,7 @@ A Claude plugin marketplace containing the skills used by Tahoe Regional Plannin
 | `trpa-monitoring-dashboard` | Monitoring Dashboard: program types, Dashboard card embed contract, host styling, Forest Health reference dashboards |
 | `trpa-transportation-tracker` | Transportation Tracker: strategies and colors, projects and funding routes, Data Trend embeds, data repos |
 | `trpa-climate-dashboard` | Climate Resilience Dashboard framework and patterns |
+| `trpa-pod` | Department pod playbook, one department at a time: intake, scoping, the beta app template, and the graduate-or-archive rule |
 
 ## Design system
 
