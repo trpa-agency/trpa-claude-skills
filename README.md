@@ -11,6 +11,7 @@ A Claude plugin marketplace containing the skills used by Tahoe Regional Plannin
 | `tahoe-living-brand` | Tahoe Living housing initiative brand — warm, community-focused identity |
 | `trpa-dashboard-stack` | Required tech stack for TRPA dashboards (Plotly + Calcite + ArcGIS SDK + AG Grid) |
 | `trpa-dashboard-qa` | Pre-deploy QA checklist for dashboards and web tools |
+| `trpa-repo-handoff` | How we hand off repo work between people: root CLAUDE.md plus docs/CONTEXT.md, HANDOFF.md, and DECISIONS.md, with a pre-flight check script |
 | `trpa-data-services` | How to access TRPA's five data systems (ArcGIS Server, AGOL, LTInfo, Accela, GeoServer) |
 | `trpa-zoning-services` | Zoning and permissible-use REST endpoints, schemas, and join logic |
 | `ltinfo-platform` | Lake Tahoe Info platform: shared shell, design tokens, embed contract, API conventions. Load with any LT Info dashboard skill |
@@ -53,7 +54,7 @@ You need Claude Code or Cowork installed first.
 Or install everything:
 
 ```
-/plugin install trpa-brand@trpa-claude-skills trpa-eip-brand@trpa-claude-skills tahoe-living-brand@trpa-claude-skills trpa-dashboard-stack@trpa-claude-skills trpa-dashboard-qa@trpa-claude-skills trpa-data-services@trpa-claude-skills trpa-zoning-services@trpa-claude-skills trpa-climate-dashboard@trpa-claude-skills ltinfo-platform@trpa-claude-skills trpa-threshold-dashboard@trpa-claude-skills trpa-monitoring-dashboard@trpa-claude-skills trpa-transportation-tracker@trpa-claude-skills
+/plugin install trpa-brand@trpa-claude-skills trpa-eip-brand@trpa-claude-skills tahoe-living-brand@trpa-claude-skills trpa-dashboard-stack@trpa-claude-skills trpa-dashboard-qa@trpa-claude-skills trpa-repo-handoff@trpa-claude-skills trpa-data-services@trpa-claude-skills trpa-zoning-services@trpa-claude-skills trpa-climate-dashboard@trpa-claude-skills ltinfo-platform@trpa-claude-skills trpa-threshold-dashboard@trpa-claude-skills trpa-monitoring-dashboard@trpa-claude-skills trpa-transportation-tracker@trpa-claude-skills
 ```
 
 **To check what's installed:** `/plugin list`
@@ -62,12 +63,14 @@ Or install everything:
 
 ## For maintainers — adding or updating a skill
 
-1. Create or update the skill folder under `skills/`.
-2. Add an entry to `.claude-plugin/marketplace.json` if it's a new skill.
-3. Commit and push.
-4. Staff get the update on their next install or refresh.
+1. Open Claude Code in this repo. The root `CLAUDE.md` loads `docs/HANDOFF.md` and `docs/CONTEXT.md`, so you start with the current state of skill work.
+2. Create or update the skill folder under `skills/`. Build new skills with the `skill-creator` skill.
+3. Add an entry to `.claude-plugin/marketplace.json` if it's a new skill, and a row to the table above.
+4. Run `claude plugin validate .` from the repo root.
+5. Before you stop, update `docs/HANDOFF.md` (the `trpa-repo-handoff` skill does this and runs `skills/trpa-repo-handoff/scripts/handoff_check.py`), commit, and push.
+6. Staff get the update on their next install or refresh.
 
-The `name` field inside each skill's `SKILL.md` frontmatter must match the `name` field used in `marketplace.json` for the install to work cleanly.
+The `name` field inside each skill's `SKILL.md` frontmatter must match the `name` field used in `marketplace.json` for the install to work cleanly. Evals under `skills/*/evals/` are gitignored on purpose; skills are the deliverable.
 
 ## Repo layout
 
@@ -75,6 +78,11 @@ The `name` field inside each skill's `SKILL.md` frontmatter must match the `name
 trpa-claude-skills/
 ├── .claude-plugin/
 │   └── marketplace.json        # the manifest staff install from
+├── CLAUDE.md                   # loads docs/HANDOFF.md and docs/CONTEXT.md for maintainers
+├── docs/
+│   ├── CONTEXT.md              # what this repo is and how skills get made and released
+│   ├── HANDOFF.md              # current state of skill work, rewritten at every handoff
+│   └── DECISIONS.md            # why the repo and the skills are shaped the way they are
 ├── README.md                   # this file
 ├── LICENSE
 └── skills/
@@ -91,6 +99,11 @@ trpa-claude-skills/
     │       └── ltinfo-tabular-catalog.md
     ├── trpa-eip-brand/
     ├── trpa-monitoring-dashboard/
+    ├── trpa-repo-handoff/
+    │   ├── SKILL.md
+    │   ├── assets/             # CLAUDE.md and docs templates
+    │   └── scripts/
+    │       └── handoff_check.py
     ├── trpa-threshold-dashboard/
     ├── trpa-transportation-tracker/
     └── trpa-zoning-services/

@@ -27,6 +27,11 @@
       "description": "TRPA's dashboard and web-app tech stack — Plotly.js, Calcite Design System, ArcGIS Maps SDK, AG Grid. CDN loading, page structure, coding patterns. Pair with a brand skill."
     },
     {
+      "name": "trpa-repo-handoff",
+      "source": "./skills/trpa-repo-handoff",
+      "description": "How TRPA hands off repo work between staff and their Claude Code instances: a root CLAUDE.md plus docs/CONTEXT.md, HANDOFF.md, and DECISIONS.md so git pull is the handoff. Use at the start of any session in a TRPA repo, when setting up a repo, and when handing off or picking up work."
+    },
+    {
       "name": "trpa-dashboard-qa",
       "source": "./skills/trpa-dashboard-qa",
       "description": "Pre-deploy QA checklist for TRPA dashboards and web tools: data, brand, stack, accessibility, mobile, and copy checks before a browser tool goes live. Pair with trpa-dashboard-stack and a brand skill."
