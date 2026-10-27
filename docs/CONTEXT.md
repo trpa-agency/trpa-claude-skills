@@ -20,7 +20,7 @@ One plugin per folder under `skills/`, each with `SKILL.md` at its root and opti
 
 | Source or destination | Type | Where | Notes |
 |---|---|---|---|
-| Design system page | Web page | tools.trpa.gov/qa/general/design-system.html | GitHub Pages at trpa-agency.github.io/tools until DNS is live; the path drops qa/ when promoted |
+| Design system page | Web page | tools.trpa.gov/qa/data/design-system.html | GitHub Pages at trpa-agency.github.io/tools until DNS is live; the path drops qa/ when promoted. It moved from qa/general to qa/data in October 2026; the brand and stack skills and the README still link qa/general |
 | Token stylesheet | CSS | trpa-agency/tools, assets/trpa-tokens.css | When a brand rule changes, change it here and in the brand skill |
 | Marketplace consumers | Claude Code, Cowork, claude.ai | Staff machines | claude.ai and Cowork take the skill folder as an upload, no auto update |
 
@@ -34,6 +34,7 @@ Every skill is built or revised with `skill-creator`: short interview, draft, tw
 - The skill `name` in SKILL.md must equal the marketplace entry `name` or the install fails.
 - Design system links moved twice in October 2026 (apps.trpa.gov, then tools.trpa.gov); check the README and the brand skills together when the domain changes again.
 - Cowork and claude.ai users get no automatic updates; tell them when a skill changes.
+- `trpa-monitoring-dashboard` carries copies of templates whose canonical source is `trpa-agency/Monitoring`, folder `ltinfo/`. Change them there first, then recopy; the copies link the kit by absolute GitHub Pages URL.
 
 ## People
 

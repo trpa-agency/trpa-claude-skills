@@ -2,6 +2,12 @@
 
 Newest first. One entry per decision someone could reasonably re-litigate. Record the why, not the what; the what is in git.
 
+## 2026-10-26: The monitoring skill carries copies of the LT Info templates; the Monitoring repo stays canonical
+
+**Why:** A skill is how the templates reach every machine and claude.ai, so `trpa-monitoring-dashboard` ships them in `assets/templates/` and the Arcade files in `assets/popups/`. The kit itself (CSS, JS, fragment modules) is not copied: pages load it by absolute URL from `https://trpa-agency.github.io/Monitoring/ltinfo/kit/`, so one fix reaches every page and the copies cannot drift from it. The templates are edited and verified in `trpa-agency/Monitoring/ltinfo/`, where the preview server, the review frame, and the Pages deploy are, and recopied here after.
+**Alternatives considered:** Templates only in the Monitoring repo, with the skill pointing at them (no offline copy for claude.ai and Cowork); copying the kit into the skill too (two kits to keep in step, and pages built from the copy would miss fixes).
+**Revisit if:** ESA publishes a versioned kit (requested framework change 6), or staff start authoring in ESA's repository and the templates move there.
+
 ## 2026-10-23: Pod engagement docs live in the tools repo, the process lives here as trpa-pod
 
 **Why:** Department engagement folders, the intake template, and the beta app scaffold sit in `trpa-agency/tools` next to the betas they produce, so an engagement and its output share one repo and one commit history. The process itself is a skill here so every machine and staff member runs an engagement the same way. The tools repo is public, so engagement notes are role-level only, and the skill repeats that rule.
