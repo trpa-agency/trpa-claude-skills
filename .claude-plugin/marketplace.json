@@ -59,7 +59,7 @@
     {
       "name": "trpa-monitoring-dashboard",
       "source": "./skills/trpa-monitoring-dashboard",
-      "description": "Monitoring Dashboard (monitoring.laketahoeinfo.org): program types and categories, page anatomy, the Dashboard card embed contract, host styling, API routes, the Forest Health reference dashboards, and maps.trpa.org data patterns."
+      "description": "Monitoring Dashboard (monitoring.laketahoeinfo.org): the LT Info fragment form for inline rendering in ESA's framework, four templates and Arcade popup files, section guidance, host styling and palettes, map and popup rules, the LTInfo_Monitoring data table, program types and page anatomy, API routes, and the Forest Health reference dashboards."
     },
     {
       "name": "trpa-transportation-tracker",

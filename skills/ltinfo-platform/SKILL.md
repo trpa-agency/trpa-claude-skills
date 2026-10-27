@@ -150,7 +150,8 @@ Transportation Data Trends take the same kind of embed as a monitoring dashboard
 - **Fluid width.** Design for the slot (400 px for a threshold chart, 980 px for a dashboard) and check 375 px. No horizontal scroll.
 - **Own your height.** The CMS iframe has a fixed height set by the admin (`ContentHeight`, `DashboardHeight`) or a default. Post the document height on load and on resize so a host that listens can size the frame, and make sure nothing breaks if it does not:
   ```javascript
-  const post = () => window.parent.postMessage({ type: 'ltinfo-embed:height', height: document.documentElement.scrollHeight }, '*');
+  // body, not documentElement: inside a frame documentElement.scrollHeight never reports less than the frame, so it could grow but never shrink
+  const post = () => window.parent.postMessage({ type: 'ltinfo-embed:height', height: document.body.scrollHeight }, '*');
   window.addEventListener('load', post); window.addEventListener('resize', post);
   ```
 - **Stop wheel zoom on maps** (`view.on('mouse-wheel', e => e.stopPropagation())`) so page scrolling inside the iframe does not become map zooming.

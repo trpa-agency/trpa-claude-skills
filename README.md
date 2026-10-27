@@ -16,7 +16,7 @@ A Claude plugin marketplace containing the skills used by Tahoe Regional Plannin
 | `trpa-zoning-services` | Zoning and permissible-use REST endpoints, schemas, and join logic |
 | `ltinfo-platform` | Lake Tahoe Info platform: shared shell, design tokens, embed contract, API conventions. Load with any LT Info dashboard skill |
 | `trpa-threshold-dashboard` | Threshold Dashboard: categories, indicators, evaluation vocabulary, indicator page fields, ThresholdEvaluation repo conventions |
-| `trpa-monitoring-dashboard` | Monitoring Dashboard: program types, Dashboard card embed contract, host styling, Forest Health reference dashboards |
+| `trpa-monitoring-dashboard` | Monitoring Dashboard: the LT Info fragment form, four templates and Arcade popups, section guidance, map and popup rules, the LTInfo_Monitoring data table, program types, Forest Health reference dashboards |
 | `trpa-transportation-tracker` | Transportation Tracker: strategies and colors, projects and funding routes, Data Trend embeds, data repos |
 | `trpa-climate-dashboard` | Climate Resilience Dashboard framework and patterns |
 | `trpa-pod` | Department pod playbook, one department at a time: intake, scoping, the beta app template, and the graduate-or-archive rule |
