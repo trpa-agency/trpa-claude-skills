@@ -75,6 +75,11 @@
       "name": "trpa-climate-dashboard",
       "source": "./skills/trpa-climate-dashboard",
       "description": "Climate Resilience Dashboard for Lake Tahoe (climate.laketahoeinfo.org). 4-goal indicator framework, 33 metrics, data sources, visualization types, and page patterns."
+    },
+    {
+      "name": "trpa-storymap-to-webpage",
+      "source": "./skills/trpa-storymap-to-webpage",
+      "description": "Rebuild an ArcGIS StoryMap (story, collection, or briefing) as a single-file TRPA web page on GitHub Pages: an extractor that outlines every block and checks every web map layer, image prep, a link checker, and a tested block template with scrolling map sidecars, swipes, galleries, timelines, and Survey123 embeds."
     }
   ],
   "url": "https://github.com/trpa-agency/trpa-claude-skills"

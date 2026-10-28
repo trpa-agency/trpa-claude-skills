@@ -20,6 +20,7 @@ A Claude plugin marketplace containing the skills used by Tahoe Regional Plannin
 | `trpa-transportation-tracker` | Transportation Tracker: strategies and colors, projects and funding routes, Data Trend embeds, data repos |
 | `trpa-climate-dashboard` | Climate Resilience Dashboard framework and patterns |
 | `trpa-pod` | Department pod playbook, one department at a time: intake, scoping, the beta app template, and the graduate-or-archive rule |
+| `trpa-storymap-to-webpage` | Rebuild an ArcGIS StoryMap as a TRPA web page on GitHub Pages: extractor with web map layer checks, image prep, link checker, and a block template |
 
 ## Design system
 
@@ -55,7 +56,7 @@ You need Claude Code or Cowork installed first.
 Or install everything:
 
 ```
-/plugin install trpa-brand@trpa-claude-skills trpa-eip-brand@trpa-claude-skills tahoe-living-brand@trpa-claude-skills trpa-dashboard-stack@trpa-claude-skills trpa-dashboard-qa@trpa-claude-skills trpa-repo-handoff@trpa-claude-skills trpa-data-services@trpa-claude-skills trpa-zoning-services@trpa-claude-skills trpa-climate-dashboard@trpa-claude-skills ltinfo-platform@trpa-claude-skills trpa-threshold-dashboard@trpa-claude-skills trpa-monitoring-dashboard@trpa-claude-skills trpa-transportation-tracker@trpa-claude-skills
+/plugin install trpa-brand@trpa-claude-skills trpa-eip-brand@trpa-claude-skills tahoe-living-brand@trpa-claude-skills trpa-dashboard-stack@trpa-claude-skills trpa-dashboard-qa@trpa-claude-skills trpa-repo-handoff@trpa-claude-skills trpa-data-services@trpa-claude-skills trpa-zoning-services@trpa-claude-skills trpa-climate-dashboard@trpa-claude-skills ltinfo-platform@trpa-claude-skills trpa-threshold-dashboard@trpa-claude-skills trpa-monitoring-dashboard@trpa-claude-skills trpa-transportation-tracker@trpa-claude-skills trpa-pod@trpa-claude-skills trpa-storymap-to-webpage@trpa-claude-skills
 ```
 
 **To check what's installed:** `/plugin list`
@@ -105,6 +106,11 @@ trpa-claude-skills/
     │   ├── assets/             # CLAUDE.md and docs templates
     │   └── scripts/
     │       └── handoff_check.py
+    ├── trpa-storymap-to-webpage/
+    │   ├── SKILL.md
+    │   ├── assets/             # the block template
+    │   ├── references/
+    │   └── scripts/            # extract, prep images, check links
     ├── trpa-threshold-dashboard/
     ├── trpa-transportation-tracker/
     └── trpa-zoning-services/

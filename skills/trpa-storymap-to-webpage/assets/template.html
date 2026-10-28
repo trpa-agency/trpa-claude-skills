@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- TEMPLATE: trpa-storymap-to-webpage. Every section below is a BLOCK with the story map type it
+       replaces. Keep the blocks the story needs, delete the rest, and keep the CSS and JS that go with
+       them (each CSS and JS group is labeled with its block name). [Bracketed text] is placeholder copy;
+       UPPER_CASE tokens are ids and URLs to fill. Image paths are relative to this file. -->
+  <title>[Story title]: [Subtitle] | TRPA</title>
+  <meta name="description" content="[One or two sentences from the story's item description.]" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="[Story title]: [Subtitle]" />
+  <meta property="og:description" content="[Short share text.]" />
+  <meta property="og:image" content="https://PAGES_HOST/REPO/IMG_PATH/hero.jpg" /><!-- absolute URL or link previews break -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ---------- base: tokens, type, shared rhythm ---------- */
+    :root {
+      --trpa-blue:#0072CE; --trpa-navy:#003B71; --trpa-deep:#002B55; --trpa-orange:#E87722;
+      --trpa-forest:#4A6118; --trpa-ice:#B4CBE8; --gray-text:#5a6577; --gray-border:#DDDDDD;
+      --page-bg:#f4f6f9; --white:#fff; --bar-h:64px; --wrap:1180px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    html,body{font-family:'Open Sans',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--trpa-navy);background:var(--white);line-height:1.6;}
+    img{display:block;max-width:100%;}
+    a{color:var(--trpa-blue);}
+    section[id]{scroll-margin-top:var(--bar-h);}
+    .skip{position:absolute;left:-999px;top:.5rem;background:#fff;color:var(--trpa-navy);padding:.5rem .8rem;border-radius:6px;z-index:2000;}
+    .skip:focus{left:.5rem;}
+    .wrap{max-width:var(--wrap);margin:0 auto;padding:0 1.75rem;}
+    .band{padding:5rem 0;}
+    .band.tint{background:var(--page-bg);}
+    .kicker{font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--trpa-blue);margin-bottom:.35rem;}
+    h2{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:800;line-height:1.2;margin-bottom:.9rem;}
+    h3{font-size:1.1rem;font-weight:700;line-height:1.3;}
+    .center{text-align:center;}
+    .lede{font-size:1.08rem;color:#2c4766;}
+    .center.lede{max-width:46rem;margin:0 auto;}
+    .credit{font-size:.72rem;color:var(--gray-text);}
+    .btn{display:inline-flex;align-items:center;gap:.45rem;font:700 .95rem 'Open Sans',sans-serif;text-decoration:none;padding:.72rem 1.2rem;border-radius:8px;border:2px solid transparent;cursor:pointer;}
+    .btn.primary{background:var(--trpa-blue);color:#fff;}
+    .btn.primary:hover{background:#005CA8;}
+    .btn.ghost{color:#fff;border-color:rgba(255,255,255,.75);background:rgba(0,43,85,.25);}
+    .btn.ghost:hover{background:rgba(255,255,255,.14);border-color:#fff;}
+
+    /* ---------- BLOCK topbar ---------- */
+    header.topbar{position:sticky;top:0;z-index:1000;background:var(--trpa-navy);color:#fff;}
+    .bar{max-width:var(--wrap);margin:0 auto;height:var(--bar-h);padding:0 1.75rem;display:flex;align-items:center;gap:1rem;}
+    .bar .logo{flex-shrink:0;line-height:0;}
+    .bar .logo img{height:42px;width:auto;}
+    .bar .brand{display:flex;flex-direction:column;text-decoration:none;color:#fff;line-height:1.15;flex-shrink:0;}
+    .bar .brand .agency{color:var(--trpa-ice);font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+    .bar .brand .name{font-size:1.08rem;font-weight:700;}
+    nav.sections{display:flex;gap:.2rem;margin-left:auto;}
+    nav.sections a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:600;padding:.35rem .65rem;border-radius:6px;opacity:.88;white-space:nowrap;}
+    nav.sections a:hover{opacity:1;background:rgba(255,255,255,.1);}
+    nav.sections a.on{opacity:1;box-shadow:inset 0 -2px 0 var(--trpa-ice);border-radius:0;}
+    .bar .cta{background:var(--trpa-blue);color:#fff;text-decoration:none;font-size:.82rem;font-weight:700;padding:.42rem .85rem;border-radius:6px;white-space:nowrap;flex-shrink:0;}
+    .bar .cta:hover{background:#005CA8;}
+    /* OPTIONAL Pages menu (only when the site already has one) */
+    details.pages{position:relative;display:inline-block;flex-shrink:0;}
+    details.pages > summary{list-style:none;cursor:pointer;font:600 .78rem 'Open Sans',sans-serif;color:#fff;border:1px solid rgba(180,203,232,.55);border-radius:999px;padding:.22rem .75rem;display:flex;align-items:center;gap:.4rem;white-space:nowrap;}
+    details.pages > summary::-webkit-details-marker{display:none;}
+    details.pages > summary::after{content:"";border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid #B4CBE8;}
+    details.pages[open] > summary,details.pages > summary:hover{background:rgba(255,255,255,.1);border-color:#fff;}
+    details.pages .menu{position:absolute;right:0;top:calc(100% + 9px);background:#fff;color:#003B71;border:1px solid #DDDDDD;border-radius:8px;box-shadow:0 8px 24px rgba(0,43,85,.25);padding:.6rem .4rem .5rem;width:250px;z-index:1200;text-align:left;}
+    details.pages .menu .g{padding:.15rem .5rem .35rem;}
+    details.pages .menu .g + .g{border-top:1px solid #eef0f3;padding-top:.4rem;}
+    details.pages .menu b{display:block;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5a6577;margin-bottom:.1rem;}
+    details.pages .menu a{display:block;padding:.2rem .4rem;margin:0 -.4rem;border-radius:4px;color:#003B71;text-decoration:none;font-size:.84rem;font-weight:600;}
+    details.pages .menu a:hover{background:#eef4fb;color:#0072CE;}
+    details.pages .menu a.on{color:#0072CE;}
+    details.pages .menu a.on::after{content:" (this page)";font-weight:400;font-size:.72rem;color:#5a6577;}
+
+    /* ---------- BLOCK hero (storycover) ---------- */
+    .hero{position:relative;min-height:calc(100vh - var(--bar-h));min-height:calc(100svh - var(--bar-h));display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:var(--trpa-deep);}
+    .hero > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;}
+    .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,43,85,.2) 0%,rgba(0,43,85,.12) 28%,rgba(0,43,85,.6) 55%,rgba(0,43,85,.9) 100%);}
+    .hero-text{position:relative;z-index:1;max-width:var(--wrap);width:100%;margin:0 auto;padding:0 1.75rem 4.5rem;text-shadow:0 1px 12px rgba(0,30,60,.35);}
+    .hero .eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--trpa-ice);}
+    .hero h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:800;line-height:1.02;letter-spacing:-.01em;margin:.35rem 0 .3rem;}
+    .hero .sub{font-size:clamp(1.15rem,2.4vw,1.6rem);font-weight:600;}
+    .hero .lede{max-width:40rem;font-size:1.05rem;margin:.9rem 0 1.6rem;color:#eef4fb;}
+    .actions{display:flex;gap:.75rem;flex-wrap:wrap;}
+    .scroll-cue{position:absolute;z-index:1;left:50%;bottom:1.2rem;width:28px;height:28px;margin-left:-14px;border-right:2px solid rgba(255,255,255,.8);border-bottom:2px solid rgba(255,255,255,.8);transform:rotate(45deg);animation:cue 2.2s ease-in-out infinite;}
+    @keyframes cue{0%,100%{transform:translateY(0) rotate(45deg);opacity:.85;}50%{transform:translateY(6px) rotate(45deg);opacity:.4;}}
+
+    /* ---------- BLOCK split (sidecar docked-panel, one slide) ---------- */
+    .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:80vh;}
+    .split-text{display:flex;flex-direction:column;justify-content:center;padding:4.5rem clamp(1.75rem,5vw,5rem);}
+    .split-text > *{max-width:34rem;}
+    .split-text p{margin:0 0 1rem;font-size:1.02rem;}
+    .split-text p.note{font-size:.9rem;color:var(--gray-text);border-left:3px solid var(--trpa-ice);padding-left:.85rem;}
+    .split-media{position:relative;min-height:340px;background:#dfe6ee;}
+    .split-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+    .split-media .credit{position:absolute;right:.6rem;bottom:.5rem;color:#fff;background:rgba(0,30,60,.55);padding:.1rem .45rem;border-radius:4px;}
+    .split.reverse .split-media{order:-1;}
+    .split.reverse .split-text{background:var(--page-bg);}
+
+    /* ---------- BLOCK cards (table rows or parallel items) ---------- */
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin-top:2rem;}
+    .card{background:#fff;border:1px solid var(--gray-border);border-top:5px solid var(--trpa-blue);border-radius:10px;padding:1.6rem 1.7rem;}
+    .card:nth-child(even){border-top-color:var(--trpa-navy);}
+    .card .num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--trpa-navy);color:#fff;font-weight:800;margin-bottom:.8rem;}
+    .card h3{font-size:1.2rem;margin-bottom:.45rem;}
+    .card p{color:#2c4766;}
+
+    /* ---------- BLOCK tiles (a list of short goals or themes) and stats (large-number) ---------- */
+    ul.tiles{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:2.2rem;}
+    ul.tiles li{background:#fff;border:1px solid var(--gray-border);border-radius:10px;padding:1.3rem;font-weight:700;font-size:1.02rem;line-height:1.35;display:flex;gap:.9rem;align-items:flex-start;}
+    ul.tiles svg{flex-shrink:0;width:38px;height:38px;padding:7px;border-radius:9px;background:#eaf3fb;stroke:var(--trpa-blue);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem;}
+    .stat{background:#fff;border:1px solid var(--gray-border);border-radius:10px;padding:1.4rem 1.5rem;text-align:center;}
+    .stat b{display:block;font-size:clamp(2.2rem,5vw,3rem);font-weight:800;color:var(--trpa-blue);line-height:1.1;}
+    .stat span{display:block;margin-top:.35rem;font-weight:600;color:#2c4766;}
+    .stat b small{font-size:.42em;font-weight:700;margin-left:.2em;letter-spacing:0;} /* "percent" spelled out stays on one line */
+    blockquote.pull{max-width:46rem;margin:2.5rem auto 0;padding:0 0 0 1.4rem;border-left:5px solid var(--trpa-orange);font-size:1.3rem;font-weight:600;line-height:1.45;}
+    blockquote.pull cite{display:block;margin-top:.6rem;font-size:.9rem;font-style:normal;font-weight:400;color:var(--gray-text);}
+
+    /* ---------- BLOCK list-gallery (bullet or numbered list beside a gallery or carousel) ---------- */
+    .two-col{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:3rem;align-items:start;}
+    ol.numbered{list-style:none;counter-reset:n;}
+    ol.numbered li{counter-increment:n;position:relative;padding:0 0 1.1rem 3.1rem;font-size:1.04rem;}
+    ol.numbered li::before{content:counter(n);position:absolute;left:0;top:-.1rem;width:2.1rem;height:2.1rem;border-radius:50%;border:2px solid var(--trpa-blue);color:var(--trpa-blue);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95rem;}
+    .gallery{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+    .gallery figure{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:#dfe6ee;}
+    .gallery img{width:100%;height:100%;object-fit:cover;}
+    .gallery figcaption{position:absolute;left:0;right:0;bottom:0;padding:1.6rem .8rem .55rem;background:linear-gradient(180deg,transparent,rgba(0,30,60,.85));color:#fff;display:flex;justify-content:space-between;align-items:flex-end;gap:.5rem;}
+    .gallery figcaption b{font-size:1rem;}
+    .gallery figcaption span{font-size:.68rem;opacity:.85;}
+    .gallery-note{font-size:.85rem;color:var(--gray-text);margin-top:.6rem;}
+
+    /* ---------- BLOCK prose-figure (paragraphs with a chart, diagram, or infographic image) ---------- */
+    .prose{max-width:46rem;margin:0 auto;}
+    .prose p{margin:0 0 1.1rem;font-size:1.04rem;}
+    .prose p:last-child{margin-bottom:0;}
+    figure.chart{max-width:62rem;margin:2.4rem auto;}
+    figure.chart a{display:block;line-height:0;}
+    figure.chart img{width:100%;height:auto;border:1px solid var(--gray-border);border-radius:10px;background:#fff;}
+    figure.chart figcaption{max-width:46rem;margin:.6rem auto 0;font-size:.85rem;color:var(--gray-text);text-align:center;}
+    figure.chart .full{display:none;}
+
+    /* ---------- BLOCK scrolly (sidecar with several slides, slideshow, or a map sidecar) ---------- */
+    .scrolly{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);background:var(--trpa-deep);color:#fff;}
+    .scrolly-media{position:sticky;top:var(--bar-h);height:calc(100vh - var(--bar-h));overflow:hidden;}
+    .scrolly-media figure{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;}
+    .scrolly-media figure.on{opacity:1;}
+    .scrolly-media img{width:100%;height:100%;object-fit:cover;}
+    .scrolly-media .credit{position:absolute;right:.8rem;bottom:.6rem;color:#fff;background:rgba(0,30,60,.55);padding:.15rem .5rem;border-radius:4px;}
+    .scrolly-steps{padding:0 clamp(1.5rem,4vw,3.5rem);}
+    .step{min-height:85vh;display:flex;flex-direction:column;justify-content:center;padding:3rem 0;}
+    .step:first-child{min-height:calc(100vh - var(--bar-h));}
+    .step-card{background:#fff;color:var(--trpa-navy);border-radius:12px;padding:1.7rem 1.8rem;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:.45;transform:translateY(8px);transition:opacity .4s,transform .4s;}
+    .step.on .step-card{opacity:1;transform:none;}
+    .step-card .num{font-size:.76rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--trpa-blue);}
+    .step-card h3{font-size:1.35rem;margin:.25rem 0 .5rem;}
+    .step-card p{color:#2c4766;}
+    .step-card a.more{display:inline-block;margin-top:.8rem;font-weight:700;text-decoration:none;}
+    .step.intro h2{color:#fff;font-size:clamp(1.8rem,3.6vw,2.6rem);}
+    .step.intro .kicker{color:var(--trpa-ice);}
+    .step.intro p{color:var(--trpa-ice);font-size:1.08rem;max-width:28rem;}
+    .step figure.inline{display:none;position:relative;}
+    .step figure.inline .credit{position:absolute;right:.5rem;bottom:.4rem;color:#fff;background:rgba(0,30,60,.55);padding:.1rem .45rem;border-radius:4px;}
+    /* map variant: the sticky media holds one MapView; photo steps fade a figure in over it */
+    .scrolly.map .scrolly-media{background:#dfe6ee;}
+    .scrolly.map .mapview{position:absolute;inset:0;}
+    .scrolly.map .scrolly-media figure{z-index:2;background:var(--trpa-deep);pointer-events:none;}
+    .scrolly.map .scrolly-media figure.contain img{object-fit:contain;}  /* diagrams and before/after pairs */
+    .swipe-tag{position:absolute;bottom:2.2rem;z-index:1;background:rgba(0,30,60,.75);color:#fff;font-size:.75rem;font-weight:700;padding:.15rem .55rem;border-radius:4px;pointer-events:none;}
+    .swipe-tag.l{left:.8rem;} .swipe-tag.r{right:.8rem;}
+    .swipe-tag[hidden]{display:none;}
+
+    /* ---------- BLOCK compare (swipe of two images; two web maps use the ArcGIS Swipe widget) ---------- */
+    figure.compare{position:relative;aspect-ratio:3/2;border-radius:12px;overflow:hidden;background:#dfe6ee;--pos:50%;margin-top:2rem;}
+    figure.compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+    figure.compare img.before{clip-path:inset(0 calc(100% - var(--pos)) 0 0);}
+    figure.compare::after{content:"";position:absolute;top:0;bottom:0;left:var(--pos);width:3px;margin-left:-1.5px;background:#fff;box-shadow:0 0 8px rgba(0,0,0,.4);pointer-events:none;}
+    figure.compare input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0;}
+    figure.compare .tag{position:absolute;top:.7rem;z-index:1;background:rgba(0,30,60,.7);color:#fff;font-size:.75rem;font-weight:700;padding:.15rem .55rem;border-radius:4px;pointer-events:none;}
+    figure.compare .tag.l{left:.7rem;} figure.compare .tag.r{right:.7rem;}
+    .compare-caption{font-size:.85rem;color:var(--gray-text);margin-top:.6rem;}
+
+    /* ---------- BLOCK timeline ---------- */
+    ol.timeline{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-top:2.4rem;}
+    ol.timeline li{position:relative;padding:1.9rem 1.2rem 0 0;}
+    ol.timeline li::before{content:"";position:absolute;top:.55rem;left:0;right:0;height:4px;background:var(--trpa-ice);}
+    ol.timeline li::after{content:"";position:absolute;top:0;left:0;width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid var(--trpa-ice);}
+    ol.timeline li.done::before{background:var(--trpa-forest);}
+    ol.timeline li.done::after{border-color:var(--trpa-forest);background:var(--trpa-forest);}
+    ol.timeline li.now::before{background:linear-gradient(90deg,var(--trpa-orange) 0 45%,var(--trpa-ice) 45%);}
+    ol.timeline li.now::after{border-color:var(--trpa-orange);box-shadow:0 0 0 5px rgba(232,119,34,.22);}
+    .timeline .when{display:block;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-text);}
+    .timeline li.done .when{color:var(--trpa-forest);}
+    .timeline li.now .when{color:var(--trpa-orange);}
+    .timeline .what{display:block;font-size:1.05rem;font-weight:700;margin-top:.2rem;line-height:1.35;}
+    .timeline .here{display:inline-block;margin-top:.5rem;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--trpa-orange);color:#fff;padding:.12rem .5rem;border-radius:999px;}
+
+    /* ---------- BLOCK links (link and PDF embeds, or an Explore section into the project's tools) ---------- */
+    .link-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:2rem;}
+    a.tool{display:flex;flex-direction:column;background:#fff;border:1px solid var(--gray-border);border-radius:10px;padding:1.3rem 1.4rem;text-decoration:none;color:var(--trpa-navy);transition:border-color .15s,box-shadow .15s;}
+    a.tool:hover{border-color:var(--trpa-blue);box-shadow:0 4px 16px rgba(0,59,113,.12);}
+    a.tool .head{display:flex;align-items:center;gap:.6rem;margin-bottom:.45rem;}
+    a.tool h3{flex:1;}
+    a.tool .chip{font-size:.66rem;font-weight:700;padding:.12rem .55rem;border-radius:999px;background:#fdf1e7;color:#a8530f;white-space:nowrap;}
+    a.tool p{font-size:.92rem;color:#2c4766;margin-bottom:.8rem;}
+    a.tool .open{margin-top:auto;font-size:.86rem;font-weight:700;color:var(--trpa-blue);}
+
+    /* ---------- BLOCK video (embed video or a hosted video resource) ---------- */
+    .video{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;margin-top:2rem;}
+    .video iframe,.video video{position:absolute;inset:0;width:100%;height:100%;border:0;}
+
+    /* ---------- BLOCK panel-over-photo (sidecar floating-panel) ---------- */
+    .floating{position:relative;min-height:90vh;display:flex;align-items:center;overflow:hidden;background:var(--trpa-deep);}
+    .floating > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+    .floating .wrap{position:relative;z-index:1;width:100%;}
+    .floating .panel{background:#fff;border-radius:12px;padding:2rem 2.1rem;max-width:30rem;box-shadow:0 12px 36px rgba(0,0,0,.3);}
+    .floating .panel p{margin-bottom:1rem;}
+    .floating .panel h3{font-size:1rem;margin-bottom:.4rem;}
+    .floating .panel ul{margin:0 0 1.4rem 1.2rem;}
+
+    /* ---------- BLOCK survey (Survey123 embed, loaded on click) ---------- */
+    .survey{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:3rem;align-items:start;}
+    .survey-frame{position:relative;border-radius:12px;overflow:hidden;background:var(--trpa-deep);aspect-ratio:4/3;border:1px solid var(--gray-border);}
+    .survey-frame > img{width:100%;height:100%;object-fit:cover;opacity:.8;}
+    .survey-frame .btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 8px 24px rgba(0,0,0,.35);font-size:1.05rem;padding:.9rem 1.5rem;}
+    .survey-frame.loaded{aspect-ratio:auto;height:min(85vh,900px);background:#fff;}
+    .survey-frame iframe{width:100%;height:100%;border:0;display:block;}
+    .survey-intro p{margin-bottom:1rem;font-size:1.04rem;}
+
+    /* ---------- BLOCK closing (credits: stay informed, contact, partner logos, footer) ---------- */
+    .informed{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2rem;align-items:center;}
+    .informed p{max-width:42rem;font-size:1.04rem;}
+    .contact{background:#fff;border:1px solid var(--gray-border);border-left:5px solid var(--trpa-blue);border-radius:8px;padding:1rem 1.3rem;font-size:.95rem;}
+    .contact b{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-text);}
+    .logos{background:#fff;border-top:1px solid var(--gray-border);padding:2rem 0;}
+    .logos .wrap{display:flex;flex-wrap:wrap;gap:1.5rem 3.5rem;justify-content:center;align-items:center;}
+    .logos img{max-height:80px;width:auto;max-width:100%;}
+    .logos img.strip{max-height:none;width:min(520px,100%);}  /* one image that already holds several logos */
+    footer.site{background:var(--trpa-navy);color:var(--trpa-ice);font-size:.84rem;padding:1.4rem 0;}
+    footer.site .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-between;align-items:center;}
+    footer.site a{color:#fff;font-weight:600;}
+
+    /* ---------- responsive ---------- */
+    @media (max-width:1060px){
+      nav.sections{display:none;}
+      .bar .cta{margin-left:auto;}
+    }
+    @media (max-width:860px){
+      .band{padding:3.5rem 0;}
+      .split,.two-col,.survey,.informed{grid-template-columns:1fr;}
+      .split{min-height:0;}
+      .split-media{min-height:0;aspect-ratio:3/2;}
+      .split.reverse .split-media{order:0;}
+      .split-text{padding:2.5rem 1.75rem;}
+      ul.tiles{grid-template-columns:1fr 1fr;}
+      .scrolly{grid-template-columns:1fr;}
+      .scrolly:not(.map) .scrolly-media{display:none;}
+      .scrolly:not(.map) .step,.scrolly:not(.map) .step:first-child{min-height:0;padding:2rem 0;}
+      .scrolly:not(.map) .step:first-child{padding-top:3.5rem;}
+      .scrolly:not(.map) .step:last-child{padding-bottom:3.5rem;}
+      .scrolly:not(.map) .step-card{opacity:1;transform:none;padding:0;overflow:hidden;}
+      .scrolly:not(.map) .step-card > :not(figure){margin-left:1.4rem;margin-right:1.4rem;}
+      .scrolly:not(.map) .step-card > :last-child{margin-bottom:1.4rem;}
+      .step figure.inline{display:block;margin-bottom:1.1rem;aspect-ratio:3/2;}
+      .step figure.inline img{width:100%;height:100%;object-fit:cover;}
+      figure.chart .full{display:inline-block;margin-top:.3rem;font-weight:700;}  /* infographics are unreadable at 375 px */
+      /* map scrolly on a phone: the map pins to the top half and the cards scroll over the lower half.
+         A fixed gap above each card (not a min-height) lets long cards clear the map before the next arrives. */
+      .scrolly.map .scrolly-media{height:50vh;z-index:0;}
+      .scrolly.map .scrolly-steps{position:relative;z-index:1;margin-top:-50vh;padding-top:50vh;}
+      .scrolly.map .step:not(.intro){min-height:0;padding:75vh 0 0;}
+      .scrolly.map .step:last-child{padding-bottom:3rem;}
+      .scrolly.map .step.intro{min-height:0;background:var(--trpa-deep);margin:0 -1.5rem;padding:2rem 1.5rem;}
+      .scrolly.map .step-card{padding:1.3rem;}
+      ol.timeline{grid-template-columns:1fr;}
+      ol.timeline li{padding:0 0 1.6rem 2.2rem;}
+      ol.timeline li::before{top:0;bottom:0;left:7px;right:auto;width:4px;height:auto;}
+      ol.timeline li.now::before{background:linear-gradient(180deg,var(--trpa-orange) 0 45%,var(--trpa-ice) 45%);}
+      .floating{min-height:0;padding:40vh 0 2rem;}
+      .floating .panel{padding:1.5rem 1.4rem;}
+    }
+    @media (max-width:560px){
+      .bar{padding:0 1rem;gap:.6rem;}
+      .bar .brand .agency{display:none;}
+      .bar .logo img{height:36px;}
+      .bar .cta{padding:.38rem .6rem;font-size:.76rem;}
+      .wrap,.hero-text{padding-left:1rem;padding-right:1rem;}
+      .split-text{padding:2.2rem 1rem;}
+      ul.tiles,.gallery{grid-template-columns:1fr;}
+    }
+    @media (max-width:440px){
+      .bar .brand{display:none;} /* logo, CTA, and Pages must fit 375 px */
+    }
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto;}
+      .scroll-cue{animation:none;}
+      .scrolly-media figure,.step-card{transition:none;}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- BLOCK topbar (story navigation). Section links = the story's navigation links, in order. When one
+       story section becomes two page sections, give the second data-nav="<first section's id>" so the
+       link stays underlined through both. No survey? Point the button at the story's main action
+       (the report, a sign-up), or drop it. -->
+
+  <header class="topbar">
+    <div class="bar">
+      <a class="logo" href="https://www.trpa.gov" target="_blank" rel="noopener"><img src="trpa-logo-color.png" alt="TRPA" /></a>
+      <a class="brand" href="#top"><span class="agency">Tahoe Regional Planning Agency</span><span class="name">[Short name]</span></a>
+      <nav class="sections" aria-label="Sections">
+        <a href="#overview">[Overview]</a><a href="#highlights">[Goals]</a><a href="#plan">[The plan]</a><a href="#map-story">[Map]</a><a href="#schedule">[Schedule]</a>
+      </nav>
+      <a class="cta" href="#survey">[Take the survey]</a>
+      <!-- OPTIONAL: Pages menu, copied from the site's other pages, with this page marked class="on" -->
+      <details class="pages" id="pages"><summary>Pages</summary><nav class="menu" aria-label="Site"><div class="g"><a href="index.html" class="on" aria-current="page">Home</a><a href="ALL_PAGES.html">All pages</a></div></nav></details>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- BLOCK hero (storycover). Title and subtitle from the cover; one-sentence lede from the item description. -->
+    <section class="hero" id="top">
+      <img src="img/hero.jpg" alt="[Describe the cover photo]" fetchpriority="high" />
+      <div class="hero-text">
+        <p class="eyebrow">[Place or program]</p>
+        <h1>[Story title]</h1>
+        <p class="sub">[Subtitle]</p>
+        <p class="lede">[One sentence on what this is and why it matters.]</p>
+        <div class="actions">
+          <a class="btn primary" href="#overview">[Read the overview]</a>
+          <a class="btn ghost" href="#survey">[Second action]</a>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#overview" aria-label="Scroll to the overview"></a>
+    </section>
+
+    <!-- BLOCK split (sidecar docked-panel with one slide). Alternate .split and .split.reverse. -->
+    <section class="split" id="overview">
+      <div class="split-text">
+        <p class="kicker">[Section label]</p>
+        <h2>[Heading that says the point]</h2>
+        <p>[Panel paragraph.]</p>
+        <p>[Panel paragraph.]</p>
+        <p class="note">[Funding line or other aside.]</p>
+      </div>
+      <figure class="split-media"><img src="img/overview.jpg" alt="[Describe the photo]" loading="lazy" /><span class="credit">Photo: [Credit]</span></figure>
+    </section>
+
+    <!-- BLOCK cards (a table whose rows are parallel items, or two to four parallel paragraphs) -->
+    <section class="band tint" id="components">
+      <div class="wrap">
+        <p class="kicker center">[Label]</p>
+        <h2 class="center">[Heading]</h2>
+        <div class="cards">
+          <article class="card"><span class="num">1</span><h3>[Item]</h3><p>[What it is.]</p></article>
+          <article class="card"><span class="num">2</span><h3>[Item]</h3><p>[What it is.]</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOCK tiles (a sentence that lists goals or themes becomes one tile each) + stats (large-number) + pull quote (quote) -->
+    <section class="band" id="highlights">
+      <div class="wrap">
+        <p class="kicker center">[Label]</p>
+        <h2 class="center">[Heading]</h2>
+        <ul class="tiles">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>[Goal]</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h15l-3.5-3.5"/><path d="M20 16H5l3.5 3.5"/></svg>[Goal]</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8.5 6h7"/><path d="M7.2 8.2l3.6 7.4"/><path d="M16.8 8.2l-3.6 7.4"/></svg>[Goal]</li>
+        </ul>
+        <div class="stats">
+          <div class="stat"><b>[38.7]<small>percent</small></b><span>[What the number measures]</span></div>
+          <div class="stat"><b>[1,200]</b><span>[What the number measures]</span></div>
+        </div>
+        <blockquote class="pull">[Quoted sentence.]<cite>[Speaker, role]</cite></blockquote>
+      </div>
+    </section>
+
+    <!-- BLOCK list-gallery (a list beside a gallery or carousel; per-image credit in the caption) -->
+    <section class="band tint" id="objectives">
+      <div class="wrap two-col">
+        <div>
+          <p class="kicker">[Label]</p>
+          <h2>[Heading]</h2>
+          <ol class="numbered"><li>[Item.]</li><li>[Item.]</li><li>[Item.]</li></ol>
+        </div>
+        <div>
+          <div class="gallery">
+            <figure><img src="img/gallery-1.jpg" alt="[Describe]" loading="lazy" /><figcaption><b>[Label]</b><span>Photo: [Credit]</span></figcaption></figure>
+            <figure><img src="img/gallery-2.jpg" alt="[Describe]" loading="lazy" /><figcaption><b>[Label]</b><span>Photo: [Credit]</span></figcaption></figure>
+          </div>
+          <p class="gallery-note">[Gallery caption.]</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOCK prose-figure (paragraphs, then a chart, diagram, or infographic image). Infographics stay
+         images: put the numbers a reader needs in the paragraphs or the alt text, link the full-size
+         file, and on phones the "Open full size" link shows because the text in the image is too small. -->
+    <section class="band" id="findings">
+      <div class="wrap">
+        <div class="prose">
+          <p class="kicker">[Label]</p>
+          <h2>[Heading that states the finding]</h2>
+          <p>[Paragraph that carries the key numbers in words.]</p>
+        </div>
+        <figure class="chart">
+          <a href="img/chart.png" target="_blank" rel="noopener"><img src="img/chart.png" alt="[Chart type and what it shows, with the main numbers]" loading="lazy" /></a>
+          <figcaption>[Caption and source.] <a class="full" href="img/chart.png" target="_blank" rel="noopener">Open full size</a></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- BLOCK scrolly (sidecar or slideshow with several slides). One figure per slide in the sticky
+         media (data-step), one .step per slide; each step repeats its image as figure.inline for phones. -->
+    <section class="scrolly" id="plan">
+      <div class="scrolly-media" aria-hidden="true">
+        <figure data-step="0" class="on"><img src="img/scrolly-0.jpg" alt="" loading="lazy" /></figure>
+        <figure data-step="1"><img src="img/scrolly-1.jpg" alt="" loading="lazy" /><span class="credit">Photo: [Credit]</span></figure>
+        <figure data-step="2"><img src="img/scrolly-2.jpg" alt="" loading="lazy" /></figure>
+      </div>
+      <div class="scrolly-steps">
+        <div class="step intro" data-step="0">
+          <p class="kicker">[Label]</p>
+          <h2>[Heading]</h2>
+          <p>[One sentence that frames the slides.]</p>
+        </div>
+        <div class="step" data-step="1">
+          <div class="step-card">
+            <figure class="inline"><img src="img/scrolly-1.jpg" alt="[Describe]" loading="lazy" /></figure>
+            <span class="num">Part 1</span><h3>[Slide title]</h3><p>[Slide text.]</p>
+          </div>
+        </div>
+        <div class="step" data-step="2">
+          <div class="step-card">
+            <figure class="inline"><img src="img/scrolly-2.jpg" alt="[Describe]" loading="lazy" /></figure>
+            <span class="num">Part 2</span><h3>[Slide title]</h3><p>[Slide text.]</p>
+            <a class="more" href="[link]">[Follow-on link] &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOCK map scrolly (a sidecar whose slides are web maps, photos, and swipes, or a map tour).
+         One MapView; each step takes its values from its [webmap] line in the outline:
+           data-webmap      the web map item id (a step may switch maps; it must be public)
+           data-lat, data-lon, data-scale   the view
+           data-layers, data-layers-off      layer titles to turn on and off, separated by |
+           data-figure      a photo step: names a figure in the sticky media that fades in over the map
+           data-swipe-leading, data-swipe-trailing   a swipe step: layer titles for each side
+           data-swipe-webmap   when the trailing side comes from a different web map, its item id
+           data-swipe-labels   "Left label|Right label" shown at the bottom of each side
+         Layer visibility carries over between steps on the same map, so every map step lists both
+         its on and its off layers (the outline prints both).
+         Steps with no data-webmap (the intro, photo steps) leave the map where it is. The Legend
+         sits in an Expand, open on desktop and closed on phones. Layers the extractor marked
+         "will not load" are skipped by the swipe; leave them out of data-layers.
+         Example maps: TRPA's public Aging Infrastructure and Stream Environment Zones web maps. -->
+    <section class="scrolly map" id="map-story">
+      <div class="scrolly-media">
+        <div class="mapview" role="region" aria-label="[Map of what the slides describe]"></div>
+        <span class="swipe-tag l" hidden></span><span class="swipe-tag r" hidden></span>
+        <figure data-figure="photo-1"><img src="img/scrolly-1.jpg" alt="" loading="lazy" /><span class="credit">Photo: [Credit]</span></figure>
+      </div>
+      <div class="scrolly-steps">
+        <div class="step intro">
+          <p class="kicker">[Label]</p>
+          <h2>[Heading]</h2>
+          <p>[What the maps show, in one sentence.]</p>
+        </div>
+        <div class="step" data-webmap="0b94a498f63d4a08ad517ddc165fb59d" data-lat="38.92665" data-lon="-119.98395" data-scale="36112"
+             data-layers="Decade Parcel Developed" data-layers-off="Impervious Surface 2019|1940_Imagery|1969_Imagery|2018_Imagery">
+          <div class="step-card"><span class="num">[Map 1]</span><h3>[Slide title]</h3><p>[Slide text.]</p></div>
+        </div>
+        <div class="step" data-webmap="0b94a498f63d4a08ad517ddc165fb59d" data-lat="38.92665" data-lon="-119.98395" data-scale="18056"
+             data-layers="1940_Imagery|2018_Imagery" data-layers-off="Decade Parcel Developed"
+             data-swipe-leading="1940_Imagery" data-swipe-trailing="2018_Imagery" data-swipe-labels="1940|2018">
+          <div class="step-card"><span class="num">[Map 2, swipe]</span><h3>[Slide title]</h3><p>[Drag the slider to compare.]</p></div>
+        </div>
+        <div class="step" data-figure="photo-1">
+          <div class="step-card">
+            <figure class="inline"><img src="img/scrolly-1.jpg" alt="[Describe]" loading="lazy" /><span class="credit">Photo: [Credit]</span></figure>
+            <span class="num">[Photo]</span><h3>[Slide title]</h3><p>[Slide text.]</p>
+          </div>
+        </div>
+        <div class="step" data-webmap="609e92e1577c4e1ab8162dcf8b2be1e5" data-lat="38.92515" data-lon="-119.9856" data-scale="18056"
+             data-layers="Stream Environment Zone|Impervious Surface" data-layers-off="1940_Imagery|1969_Imagery|2018_Imagery">
+          <div class="step-card"><span class="num">[Map 3]</span><h3>[Slide title]</h3><p>[Slide text.]</p></div>
+        </div>
+        <div class="step" data-webmap="0b94a498f63d4a08ad517ddc165fb59d" data-lat="38.92515" data-lon="-119.9856" data-scale="18056"
+             data-layers="Decade Parcel Developed" data-layers-off="Impervious Surface 2019|1940_Imagery|1969_Imagery|2018_Imagery"
+             data-swipe-leading="Decade Parcel Developed"
+             data-swipe-webmap="609e92e1577c4e1ab8162dcf8b2be1e5" data-swipe-trailing="Stream Environment Zone"
+             data-swipe-labels="[Development by decade]|[Stream environment zones]">
+          <div class="step-card"><span class="num">[Map 4, swipe across two web maps]</span><h3>[Slide title]</h3><p>[Slide text.]</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOCK compare (swipe between two images; drag or use arrow keys) -->
+    <section class="band" id="compare">
+      <div class="wrap">
+        <p class="kicker">[Label]</p>
+        <h2>[Heading]</h2>
+        <figure class="compare">
+          <img src="img/after.jpg" alt="[After: describe]" loading="lazy" />
+          <img class="before" src="img/before.jpg" alt="[Before: describe]" loading="lazy" />
+          <span class="tag l">[Before label]</span><span class="tag r">[After label]</span>
+          <input type="range" min="0" max="100" value="50" aria-label="Slide to compare [before] and [after]" />
+        </figure>
+        <p class="compare-caption">[Caption and credits.]</p>
+      </div>
+    </section>
+
+    <!-- BLOCK timeline. data-from and data-to (YYYY-MM) mark finished phases and the current one. -->
+    <section class="band tint" id="schedule">
+      <div class="wrap">
+        <p class="kicker">[Schedule]</p>
+        <h2>[Heading]</h2>
+        <ol class="timeline">
+          <li data-from="2026-03" data-to="2026-08"><span class="when">[Spring to summer 2026]</span><span class="what">[Phase]</span></li>
+          <li data-from="2026-09" data-to="2027-05"><span class="when">[Fall 2026 to spring 2027]</span><span class="what">[Phase]</span></li>
+          <li data-from="2027-06" data-to="2027-12"><span class="when">[Late 2027]</span><span class="what">[Phase]</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- BLOCK links (link or PDF embed cards; or an Explore section pointing at the project's own tools) -->
+    <section class="band" id="explore">
+      <div class="wrap">
+        <p class="kicker">[Explore]</p>
+        <h2>[Heading]</h2>
+        <div class="link-grid">
+          <a class="tool" href="[url]"><div class="head"><h3>[Title]</h3><span class="chip">[Draft]</span></div><p>[What the reader finds there.]</p><span class="open">[Open the map] &rarr;</span></a>
+          <a class="tool" href="[pdf url]" target="_blank" rel="noopener"><div class="head"><h3>[Document title]</h3><span class="chip">PDF</span></div><p>[One line.]</p><span class="open">Open the PDF &rarr;</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOCK video. YouTube: use the youtube-nocookie.com/embed/<id> URL, not the embedly embedSrc.
+         Hosted video resource: <video controls preload="none" poster="img/poster.jpg" src="media/clip.mp4"></video> -->
+    <section class="band tint" id="video">
+      <div class="wrap">
+        <h2>[Heading]</h2>
+        <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/VIDEO_ID" title="[Video title]" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+      </div>
+    </section>
+
+    <!-- BLOCK panel-over-photo (sidecar floating-panel) -->
+    <section class="floating" id="involved">
+      <img src="img/floating.jpg" alt="" loading="lazy" />
+      <div class="wrap">
+        <div class="panel">
+          <p class="kicker">[Label]</p>
+          <h2>[Heading]</h2>
+          <p>[Panel text.]</p>
+          <h3>[List lead-in:]</h3>
+          <ul><li>[Item]</li><li>[Item]</li></ul>
+          <a class="btn primary" href="#survey">[Button text]</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOCK survey (Survey123 embed). Fill SURVEY from the extractor's survey_share and survey_iframe. -->
+    <section class="band" id="survey">
+      <div class="wrap survey">
+        <div class="survey-intro">
+          <p class="kicker">[Public survey]</p>
+          <h2>[Heading]</h2>
+          <p>[What the survey asks, from the form's own intro, and how long it takes.]</p>
+          <p><a id="survey-newtab" href="#" target="_blank" rel="noopener">Open the survey in a new tab</a></p>
+        </div>
+        <div class="survey-frame" id="survey-frame">
+          <img src="img/survey.jpg" alt="" loading="lazy" />
+          <button class="btn primary" id="survey-start" type="button">Start the survey</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOCK closing (credits). Contact names the agency or program, not staff, unless told otherwise. -->
+    <section class="band tint" id="stay-informed">
+      <div class="wrap informed">
+        <div>
+          <p class="kicker">[Stay informed]</p>
+          <h2>[Heading]</h2>
+          <p>[Closing text from the credits block.]</p>
+        </div>
+        <div class="contact"><b>Contact</b>Tahoe Regional Planning Agency<br /><a href="https://www.trpa.gov/contact/" target="_blank" rel="noopener">trpa.gov/contact</a></div>
+      </div>
+    </section>
+    <!-- One image that already holds several logos gets class="strip"; separate logo files do not. -->
+    <div class="logos"><div class="wrap"><img class="strip" src="img/partner-logos.png" alt="[Partner names]" loading="lazy" /></div></div>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <span>[Funding or program line.]</span>
+      <span><a href="https://www.trpa.gov" target="_blank" rel="noopener">trpa.gov</a></span>
+    </div>
+  </footer>
+
+  <script>
+    // ---------- BLOCK survey ----------
+    const SURVEY = {
+      share: "https://survey123.arcgis.com/share/SURVEY_ITEM_ID",
+      embed: "https://survey123.arcgis.com/share/SURVEY_ITEM_ID?embed=fullscreen&hide=footer,theme"
+    };
+    (function(){
+      const start = document.getElementById("survey-start"); if (!start) return;
+      document.getElementById("survey-newtab").href = SURVEY.share;
+      start.addEventListener("click", () => {
+        const frame = document.getElementById("survey-frame");
+        const iframe = document.createElement("iframe");
+        iframe.src = SURVEY.embed;
+        iframe.title = "[Survey title]";
+        iframe.allow = "geolocation";
+        frame.replaceChildren(iframe);
+        frame.classList.add("loaded");
+      });
+    })();
+
+    // ---------- BLOCK timeline: mark finished phases and the current one from today's date ----------
+    (function(){
+      const now = new Date(), ym = now.getFullYear() * 12 + now.getMonth();
+      const toYm = s => { const [y, m] = s.split("-").map(Number); return y * 12 + (m - 1); };
+      document.querySelectorAll("ol.timeline li[data-from]").forEach(li => {
+        const from = toYm(li.dataset.from), to = toYm(li.dataset.to);
+        if (ym > to) li.classList.add("done");
+        else if (ym >= from) {
+          li.classList.add("now");
+          li.insertAdjacentHTML("beforeend", '<span class="here">We are here</span>');
+        }
+      });
+    })();
+
+    // ---------- BLOCK scrolly: activate the step in the middle of the screen ----------
+    function watchSteps(section, onStep){
+      const steps = section.querySelectorAll(".step");
+      const io = new IntersectionObserver(entries => entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        steps.forEach(s => s.classList.toggle("on", s === e.target));
+        onStep(e.target);
+      }), { rootMargin: "-45% 0px -45% 0px" });
+      steps.forEach(s => io.observe(s));
+    }
+    document.querySelectorAll(".scrolly:not(.map)").forEach(sec => {
+      const figs = sec.querySelectorAll(".scrolly-media figure");
+      watchSteps(sec, step => figs.forEach(f => f.classList.toggle("on", f.dataset.step === step.dataset.step)));
+    });
+
+    // ---------- BLOCK map scrolly: ArcGIS Maps SDK loads only when the page has a map block ----------
+    (function(){
+      const sections = document.querySelectorAll(".scrolly.map");
+      if (!sections.length) return;
+      const css = document.createElement("link");
+      css.rel = "stylesheet"; css.href = "https://js.arcgis.com/4.31/esri/themes/light/main.css";
+      document.head.append(css);
+      const sdk = document.createElement("script");
+      sdk.src = "https://js.arcgis.com/4.31/";
+      sdk.onload = () => require(["esri/WebMap", "esri/views/MapView", "esri/widgets/Legend", "esri/widgets/Expand",
+                                  "esri/widgets/Swipe", "esri/core/reactiveUtils"],
+                                 (WebMap, MapView, Legend, Expand, Swipe, reactiveUtils) => {
+        const list = s => (s || "").split("|").map(t => t.trim()).filter(Boolean);
+        const eachLayer = (coll, fn) => coll.forEach(l => { fn(l); if (l.layers) eachLayer(l.layers, fn); });
+        const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        sections.forEach(sec => {
+          const mapSteps = [...sec.querySelectorAll(".step[data-webmap]")];
+          if (!mapSteps.length) return;
+          const maps = {}, borrowed = {};
+          const getMap = id => maps[id] || (maps[id] = new WebMap({ portalItem: { id } }));
+          const figs = sec.querySelectorAll(".scrolly-media figure[data-figure]");
+          const tags = sec.querySelectorAll(".swipe-tag");
+          const view = new MapView({
+            container: sec.querySelector(".mapview"), map: getMap(mapSteps[0].dataset.webmap),
+            navigation: { mouseWheelZoomEnabled: false },  // page scroll must not zoom the map
+            constraints: { snapToZoom: false },
+            ui: { components: ["zoom", "attribution"] }
+          });
+          view.ui.add(new Expand({ view, content: new Legend({ view }), expandTooltip: "Legend",
+                                   expanded: matchMedia("(min-width: 861px)").matches }), "top-right");
+          // The trailing side of a swipe across two web maps borrows layers from its own copy of that
+          // map, so a step that displays the second map keeps all of its layers
+          const borrow = async (id, titles) => {
+            if (!borrowed[id]) {
+              const m = new WebMap({ portalItem: { id } });
+              await m.load();
+              borrowed[id] = m.layers.toArray();
+              m.removeAll();
+            }
+            return borrowed[id].filter(l => titles.includes(l.title));  // top-level layers named on the step
+          };
+          let swipe = null, added = [], seq = 0;
+          const dropSwipe = () => {
+            if (swipe) { view.ui.remove(swipe); swipe.destroy(); swipe = null; }
+            if (added.length) { view.map.removeMany(added); added = []; }
+            tags.forEach(t => t.hidden = true);
+          };
+          const show = async step => {
+            figs.forEach(f => f.classList.toggle("on", !!step.dataset.figure && f.dataset.figure === step.dataset.figure));
+            if (!step.dataset.webmap) return;  // the intro and photo steps leave the map where it is
+            const n = ++seq;
+            dropSwipe();
+            const map = getMap(step.dataset.webmap);
+            if (view.map !== map) view.map = map;
+            try { await map.load(); await reactiveUtils.whenOnce(() => view.ready); } catch (e) { return; }
+            if (n !== seq) return;  // a newer step took over while this one loaded
+            const on = list(step.dataset.layers), off = list(step.dataset.layersOff);
+            eachLayer(map.layers, l => { if (on.includes(l.title)) l.visible = true; else if (off.includes(l.title)) l.visible = false; });
+            const lead = list(step.dataset.swipeLeading), trail = list(step.dataset.swipeTrailing);
+            if (lead.length || trail.length) {
+              const leading = map.allLayers.filter(l => lead.includes(l.title)).toArray();
+              let trailing = map.allLayers.filter(l => trail.includes(l.title)).toArray();
+              if (step.dataset.swipeWebmap && step.dataset.swipeWebmap !== step.dataset.webmap) {
+                trailing = await borrow(step.dataset.swipeWebmap, trail);
+                if (n !== seq) return;
+                map.addMany(trailing);
+                added = trailing;
+              }
+              [...leading, ...trailing].forEach(l => l.visible = true);
+              await Promise.allSettled([...leading, ...trailing].map(l => l.load()));
+              if (n !== seq) return;
+              // a dead service stays off the swipe: the Swipe widget throws on a layer that failed to load
+              const ok = ls => ls.filter(l => l.loadStatus === "loaded");
+              swipe = new Swipe({ view, leadingLayers: ok(leading), trailingLayers: ok(trailing), position: 50 });
+              view.ui.add(swipe);
+              const labels = list(step.dataset.swipeLabels);
+              tags.forEach((t, i) => { t.textContent = labels[i] || ""; t.hidden = !labels[i]; });
+            }
+            view.goTo({ center: [+step.dataset.lon, +step.dataset.lat], scale: +step.dataset.scale },
+                      { duration: reduced ? 0 : 1200 }).catch(() => {});  // a newer goTo interrupts an older one
+          };
+          view.when(() => { if (!seq) show(mapSteps[0]); });
+          watchSteps(sec, show);
+        });
+      });
+      document.head.append(sdk);
+    })();
+
+    // ---------- BLOCK compare ----------
+    document.querySelectorAll("figure.compare input").forEach(inp =>
+      inp.addEventListener("input", () => inp.parentElement.style.setProperty("--pos", inp.value + "%")));
+
+    // ---------- BLOCK topbar: underline the section in view (data-nav points a section at another
+    // section's link); close the Pages menu outside it ----------
+    (function(){
+      const links = [...document.querySelectorAll("nav.sections a")];
+      const byId = Object.fromEntries(links.map(a => [a.hash.slice(1), a]));
+      const io = new IntersectionObserver(entries => entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        links.forEach(a => a.classList.remove("on"));
+        const key = e.target.dataset.nav || e.target.id;
+        if (byId[key]) byId[key].classList.add("on");
+      }), { rootMargin: "-50% 0px -50% 0px" });
+      document.querySelectorAll("main section[id]").forEach(s => io.observe(s));
+      const p = document.getElementById("pages"); if (!p) return;
+      document.addEventListener("click", e => { if (p.open && !p.contains(e.target)) p.open = false; });
+      document.addEventListener("keydown", e => { if (e.key === "Escape") p.open = false; });
+    })();
+  </script>
+</body>
+</html>
