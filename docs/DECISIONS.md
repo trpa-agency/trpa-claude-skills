@@ -2,6 +2,12 @@
 
 Newest first. One entry per decision someone could reasonably re-litigate. Record the why, not the what; the what is in git.
 
+## 2026-10-28: The story map skill's image script needs Pillow
+
+**Why:** `trpa-storymap-to-webpage` has to resize story images (often 5,000 pixels wide) and strip their EXIF, because drone photos carry GPS. The standard library cannot decode or re-encode JPEG or PNG. Pillow ships with `arcgispro-py3`, which every machine that runs TRPA skills already has, so `prep_images.py` uses it. The extractor and the link checker stay standard library, as the repo's scripts rule asks.
+**Alternatives considered:** Standard library only (pages would ship the full-size originals, about 45 MB for one story, with GPS left in); ImageMagick (not installed on agency machines).
+**Revisit if:** someone without ArcGIS Pro needs to run the skill; then document `pip install pillow` in the SKILL.md.
+
 ## 2026-10-26: The monitoring skill carries copies of the LT Info templates; the Monitoring repo stays canonical
 
 **Why:** A skill is how the templates reach every machine and claude.ai, so `trpa-monitoring-dashboard` ships them in `assets/templates/` and the Arcade files in `assets/popups/`. The kit itself (CSS, JS, fragment modules) is not copied: pages load it by absolute URL from `https://trpa-agency.github.io/Monitoring/ltinfo/kit/`, so one fix reaches every page and the copies cannot drift from it. The templates are edited and verified in `trpa-agency/Monitoring/ltinfo/`, where the preview server, the review frame, and the Pages deploy are, and recopied here after.
